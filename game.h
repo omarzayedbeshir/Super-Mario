@@ -1,7 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
-
+#include <QJsonArray>
 #include <QMainWindow>
+#include <QGraphicsView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,8 +17,15 @@ class Game : public QMainWindow
 public:
     Game(QWidget *parent = nullptr);
     ~Game();
+    void loadLevel(int levelNumber);
+    void loadPlayerPosition(const QJsonObject &levelData);
+    void loadPlatforms(const QJsonArray &platforms);
+    void loadEnemies(const QJsonArray &enemies);
 
 private:
     Ui::Game *ui;
+    int current_level;
+    QGraphicsScene *scene;
+    QGraphicsView *view;
 };
 #endif // GAME_H

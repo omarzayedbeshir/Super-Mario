@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     game.cpp \
+    mario.cpp \
     platform.cpp
 
 HEADERS += \
     game.h \
+    mario.h \
     platform.h
 
 FORMS += \
