@@ -10,10 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    game.cpp
+    game.cpp \
+    platform.cpp
 
 HEADERS += \
-    game.h
+    game.h \
+    platform.h
 
 FORMS += \
     game.ui
