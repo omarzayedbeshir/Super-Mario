@@ -37,24 +37,33 @@ Game::Game(QWidget *parent)
     scene->addItem(platform3);
 
     // Setting up pipes
-    pipe *pipe1 = new pipe(400, 468);
+    pipe *pipe1 = new pipe(400, 435);
     scene->addItem(pipe1);
+    pipe *pipe2 = new pipe(1700, 435); // Example positions
+    pipe *pipe3 = new pipe(1000, 435);
+    scene->addItem(pipe2);
+    scene->addItem(pipe3);
+
+    QList<pipe*> pipes;
+    pipes.append(pipe1);
+    pipes.append(pipe2);
+    pipes.append(pipe3);
 
 
 
     QList<QGraphicsItem*> allItems = scene->items();
     QList<QGraphicsItem*> platforms;
+
     for (QGraphicsItem *item : allItems) {
         if (dynamic_cast<Platform*>(item)) {
             platforms.append(item);
-        } else if (dynamic_cast<pipe*>(item)) {
-            platforms.append(dynamic_cast<pipe*>(item)->getTopPart());
-        }
+    }   
     }
 
     // Setting up Mario
     Mario *mario = new Mario(450, 120, scene);
     mario->setPlatforms(platforms);
+    mario->setPipes(pipes);
     scene->addItem(mario);
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
