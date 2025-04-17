@@ -53,7 +53,6 @@ void Mario::applyGravity() {
         }
     }
 }
-
 void Mario::isCollidingWithDynamicObstacles() {
     QList<QGraphicsItem*> collisions = collidingItems();
 
@@ -63,16 +62,16 @@ void Mario::isCollidingWithDynamicObstacles() {
             double marioBottom = y() + height;
             double goombaTop = goomba->y();
 
-            if (marioBottom <= goombaTop + 5) {
-                velocityY = -10.0;
+            if (marioBottom <= goombaTop + goomba->getHeight() / 2) {
+                //velocityY = -1.0;
                 onGround = false;
                 currentScene->removeItem(goomba);
                 delete goomba;
             } else if (canTakeDamage) {
                 lives--;
                 canTakeDamage = false;
-                damageCoolDownTimer->start(1000);
-                velocityY = -15.0;
+                damageCoolDownTimer->start(1500);
+                //velocityY = -15.0;
                 onGround = false;
 
                 if (lives == 0) {
@@ -103,7 +102,6 @@ void Mario::keyPressEvent(QKeyEvent *event)
         } else {
             setPos(x() + 10, y());
         }
-
     } else if (pressedKeys.contains(Qt::Key_Left)) {
         setPos(x() - 10, y());
     } else if (pressedKeys.contains(Qt::Key_Right)) {
