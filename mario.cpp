@@ -39,19 +39,38 @@ void Mario::applyGravity() {
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
-    case Qt::Key_Left:
+    pressedKeys.insert(event->key());
+
+    if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
+        if (onGround) {
+            velocityY = -7.1;
+            setPos(x() - 7.1, y());
+            onGround = false;
+        } else {
+            setPos(x() - 10, y());
+        }
+    } else if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Right)) {
+        if (onGround) {
+            velocityY = -7.1;
+            setPos(x() + 7.1, y());
+            onGround = false;
+        } else {
+            setPos(x() + 10, y());
+        }
+
+    } else if (pressedKeys.contains(Qt::Key_Left)) {
         setPos(x() - 10, y());
-        break;
-    case Qt::Key_Right:
+    } else if (pressedKeys.contains(Qt::Key_Right)) {
         setPos(x() + 10, y());
-        break;
-    case Qt::Key_Up:
-    case Qt::Key_Space:
+    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
         if (onGround) {
             velocityY = -10.0;
             onGround = false;
         }
-        break;
     }
+}
+
+void Mario::keyReleaseEvent(QKeyEvent *event)
+{
+    pressedKeys.remove(event->key());
 }
