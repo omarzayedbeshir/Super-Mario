@@ -25,7 +25,7 @@ Game::Game(QWidget *parent)
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     Platform *platform = new Platform(100, 500, 600, 30);
-    Mario *mario = new Mario(450, 120);
+    Mario *mario = new Mario(450, 120, scene);
     setFixedSize(800, 600);
     scene->addItem(platform);
     scene->addItem(mario);

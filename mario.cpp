@@ -2,14 +2,29 @@
 #include <QTimer>
 #include <QBrush>
 #include <QGraphicsView>
+#include <QGraphicsScene>
+#include "goomba.h"
 
-Mario::Mario(int x, int y) {
+Mario::Mario(int x, int y, QGraphicsScene* scene) {
     setRect(0, 0, 50, 50);
     setPos(y, x);
+    currentScene = scene;
     gravityTimer = new QTimer(this);
     connect(gravityTimer, &QTimer::timeout, this, &Mario::applyGravity);
     gravityTimer->start(16);
+
+    dynamicObstaclesTimer = new QTimer(this);
+    connect(dynamicObstaclesTimer, &QTimer::timeout, this, &Mario::isCollidingWithDynamicObstacles);
+    dynamicObstaclesTimer->start(16);
+
+    damageCoolDownTimer = new QTimer(this);
+    damageCoolDownTimer->setSingleShot(true);
+    connect(damageCoolDownTimer, &QTimer::timeout, this, &Mario::canTakeDamageTruthify);
     setBrush(Qt::white);
+}
+
+void Mario::canTakeDamageTruthify() {
+    canTakeDamage = true;
 }
 
 void Mario::setPlatforms(const QList<QGraphicsItem*>& platforms) {
@@ -31,6 +46,25 @@ void Mario::applyGravity() {
                 setPos(x(), platform->y() - rect().height());
                 onGround = true;
                 velocityY = 0;
+            }
+            break;
+        }
+    }
+}
+
+void Mario::isCollidingWithDynamicObstacles() {
+    QList<QGraphicsItem*> collisions = collidingItems();
+
+    for (QGraphicsItem* collision : collisions) {
+        if (dynamic_cast<Goomba*>(collision) && canTakeDamage) {
+            velocityY = -10.0;
+            lives--;
+            onGround = false;
+            canTakeDamage = false;
+            damageCoolDownTimer->start(1000);
+
+            if (lives == 0) {
+                currentScene->clear();
             }
             break;
         }
