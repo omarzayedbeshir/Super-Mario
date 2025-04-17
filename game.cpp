@@ -27,16 +27,14 @@ Game::Game(QWidget *parent)
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    Platform *platform = new Platform(100, 500, 600, 30);
-    Mario *mario = new Mario(450, 120, scene);
-    setFixedSize(800, 600);
-    scene->addItem(platform);
-    scene->addItem(mario);
-    mario->setFlag(QGraphicsItem::ItemIsFocusable);
-    mario->setFocus();
 
-    Goomba *goomba1 = new Goomba(450, 240);
-    scene->addItem(goomba1);
+    // Setting up platforms
+    Platform *platform1 = new Platform(100, 500, 600, 30);
+    Platform *platform2 = new Platform(800, 500, 600, 30);
+    Platform *platform3 = new Platform(1500, 500, 600, 30);
+    scene->addItem(platform1);
+    scene->addItem(platform2);
+    scene->addItem(platform3);
 
     pipe *pipe = new class pipe(400, 468);
     scene->addItem(pipe);
@@ -51,13 +49,39 @@ Game::Game(QWidget *parent)
         }
     }
 
+ 
     platforms.append(pipe->getTopPart()); // Only top is solid
 
 
+    // Setting up Mario
+    Mario *mario = new Mario(450, 120, scene);
     mario->setPlatforms(platforms);
+    scene->addItem(mario);
+    mario->setFlag(QGraphicsItem::ItemIsFocusable);
+    mario->setFocus();
+
+
+    setFixedSize(800, 600);
+
+    // Setting up Enemies
+    Goomba *goomba1 = new Goomba(450, 240);
+    Goomba *goomba2 = new Goomba(450, 400);
+    Goomba *goomba3 = new Goomba(450, 850);
+    Goomba *goomba4 = new Goomba(450, 1600);
+    Goomba *goomba5 = new Goomba(450, 1900);
     goomba1->setPlatforms(platforms);
+    goomba2->setPlatforms(platforms);
+    goomba3->setPlatforms(platforms);
+    goomba4->setPlatforms(platforms);
+    goomba5->setPlatforms(platforms);
+    scene->addItem(goomba1);
+    scene->addItem(goomba2);
+    scene->addItem(goomba3);
+    scene->addItem(goomba4);
+    scene->addItem(goomba5);
 
 
+    // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
     scoreText->setPlainText("Score: 0");
     scoreText->setDefaultTextColor(Qt::white);
