@@ -29,6 +29,14 @@ void Mario::canTakeDamageTruthify() {
     canTakeDamage = true;
 }
 
+int Mario::getLives() {
+    return lives;
+}
+
+int Mario::getScore() {
+    return score;
+}
+
 void Mario::setPlatforms(const QList<QGraphicsItem*>& platforms) {
     platformList = platforms;
 }
@@ -67,6 +75,7 @@ void Mario::isCollidingWithDynamicObstacles() {
                 onGround = false;
                 currentScene->removeItem(goomba);
                 delete goomba;
+                score += 100;
             } else if (canTakeDamage) {
                 lives--;
                 canTakeDamage = false;
