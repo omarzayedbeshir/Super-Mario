@@ -13,12 +13,14 @@ SOURCES += \
     main.cpp \
     game.cpp \
     mario.cpp \
+    pipe.cpp \
     platform.cpp
 
 HEADERS += \
     game.h \
     goomba.h \
     mario.h \
+    pipe.h \
     platform.h
 
 FORMS += \
