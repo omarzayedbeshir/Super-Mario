@@ -23,14 +23,23 @@ Game::Game(QWidget *parent)
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Level Creation
-    Platform *platform = new Platform(100, 500, 200, 30);
+    Platform *platform = new Platform(100, 500, 600, 30);
     Mario *mario = new Mario(450, 120);
     setFixedSize(800, 600);
     scene->addItem(platform);
     scene->addItem(mario);
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
+
+    QList<QGraphicsItem*> allItems = scene->items();
+    QList<QGraphicsItem*> platforms;
+    for (QGraphicsItem *item : allItems) {
+        if (dynamic_cast<Platform*>(item)) {
+            platforms.append(item);
+        }
+    }
+
+    mario->setPlatforms(platforms);
 }
 
 Game::~Game()
