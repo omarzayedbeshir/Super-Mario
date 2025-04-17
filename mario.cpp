@@ -4,9 +4,12 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include "goomba.h"
+#include <QPixmap>
 
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
-    setRect(0, 0, 50, 50);
+
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+    setScale(scale);
     setPos(y, x);
     currentScene = scene;
     gravityTimer = new QTimer(this);
@@ -20,7 +23,6 @@ Mario::Mario(int x, int y, QGraphicsScene* scene) {
     damageCoolDownTimer = new QTimer(this);
     damageCoolDownTimer->setSingleShot(true);
     connect(damageCoolDownTimer, &QTimer::timeout, this, &Mario::canTakeDamageTruthify);
-    setBrush(Qt::white);
 }
 
 void Mario::canTakeDamageTruthify() {
@@ -43,7 +45,7 @@ void Mario::applyGravity() {
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
             if (velocityY > 0) {
-                setPos(x(), platform->y() - rect().height());
+                setPos(x(), platform->y() - height);
                 onGround = true;
                 velocityY = 0;
             }
@@ -56,17 +58,27 @@ void Mario::isCollidingWithDynamicObstacles() {
     QList<QGraphicsItem*> collisions = collidingItems();
 
     for (QGraphicsItem* collision : collisions) {
-        if (dynamic_cast<Goomba*>(collision) && canTakeDamage) {
-            velocityY = -10.0;
-            lives--;
-            onGround = false;
-            canTakeDamage = false;
-            damageCoolDownTimer->start(1000);
+        Goomba* goomba = dynamic_cast<Goomba*>(collision);
+        if (goomba) {
+            double marioBottom = y() + height;
+            double goombaTop = goomba->y();
 
-            if (lives == 0) {
-                currentScene->clear();
+            if (marioBottom <= goombaTop + 5) {
+                velocityY = -10.0;
+                onGround = false;
+                currentScene->removeItem(goomba);
+                delete goomba;
+            } else if (canTakeDamage) {
+                lives--;
+                canTakeDamage = false;
+                damageCoolDownTimer->start(1000);
+                velocityY = -15.0;
+                onGround = false;
+
+                if (lives == 0) {
+                    currentScene->clear();
+                }
             }
-            break;
         }
     }
 }
