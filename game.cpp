@@ -15,7 +15,7 @@ Game::Game(QWidget *parent)
     current_level = 1;
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 800, 600);
+    scene->setSceneRect(0, 0, 3000, 600);
 
     view = new QGraphicsView(this);
     view->setScene(scene);
@@ -68,8 +68,18 @@ Game::Game(QWidget *parent)
     connect(statsUpdater, &QTimer::timeout, this, [this, mario, scoreText, livesText]() {
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
         scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
+
+        scoreText->setPos(view->mapToScene(10, 10));
+        livesText->setPos(view->mapToScene(10, 40));
     });
     statsUpdater->start(16);
+    view->centerOn(mario);
+
+    QTimer* cameraTimer = new QTimer();
+    connect(cameraTimer, &QTimer::timeout, this, [this, mario]() {
+        view->centerOn(mario);
+    });
+    cameraTimer->start(1);
 }
 
 Game::~Game()
