@@ -1,7 +1,7 @@
 #ifndef MARIO_H
 #define MARIO_H
 
-#include <QGraphicsRectItem>
+#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QGraphicsItem>
 #include <QObject>
@@ -10,7 +10,7 @@
 #include <QList>
 #include <QSet>
 
-class Mario : public QObject, public QGraphicsRectItem
+class Mario : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
@@ -30,6 +30,8 @@ private:
     QTimer* damageCoolDownTimer;
     double velocityY = 0;
     double gravity = 0.4;
+    double scale = 2.0;
+    int height = 16 * scale;
     bool onGround = false;
     bool canTakeDamage = true;
     int lives = 10;

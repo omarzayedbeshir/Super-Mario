@@ -4,7 +4,8 @@
 #include <QGraphicsView>
 
 Goomba::Goomba(int x, int y) {
-    setRect(0, 0, 50, 50);
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Goomba_Walk1.png"));
+    setScale(scale);
     setPos(y, x);
 
     gravityTimer = new QTimer(this);
@@ -15,7 +16,6 @@ Goomba::Goomba(int x, int y) {
 
     gravityTimer->start(16);
     moveTimer->start(16);
-    setBrush(Qt::red);
 }
 
 void Goomba::setPlatforms(const QList<QGraphicsItem*>& platforms) {
@@ -34,7 +34,7 @@ void Goomba::applyGravity() {
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
             if (velocityY > 0) {
-                setPos(x(), platform->y() - rect().height());
+                setPos(x(), platform->y() - height);
                 onGround = true;
                 velocityY = 0;
             }
@@ -50,4 +50,8 @@ void Goomba::move() {
         direction *= -1;
         moved = 0;
     }
+}
+
+int Goomba::getHeight() {
+    return height;
 }
