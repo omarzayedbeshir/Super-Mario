@@ -16,6 +16,8 @@ class Mario : public QObject, public QGraphicsPixmapItem
 public:
     Mario(int x, int y, QGraphicsScene* scene);
     void setPlatforms(const QList<QGraphicsItem*>& platforms);
+    int getLives();
+    int getScore();
 
 private:
     void keyPressEvent(QKeyEvent *event);
@@ -31,6 +33,7 @@ private:
     double velocityY = 0;
     double gravity = 0.4;
     double scale = 2.0;
+    int score = 0;
     int height = 16 * scale;
     bool onGround = false;
     bool canTakeDamage = true;
