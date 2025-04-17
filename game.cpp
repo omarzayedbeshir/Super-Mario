@@ -48,6 +48,7 @@ Game::Game(QWidget *parent)
     mario->setPlatforms(platforms);
     goomba1->setPlatforms(platforms);
 
+
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
     scoreText->setPlainText("Score: 0");
     scoreText->setDefaultTextColor(Qt::white);
@@ -72,7 +73,7 @@ Game::Game(QWidget *parent)
         scoreText->setPos(view->mapToScene(10, 10));
         livesText->setPos(view->mapToScene(10, 40));
     });
-    statsUpdater->start(16);
+    statsUpdater->start(1);
     view->centerOn(mario);
 
     QTimer* cameraTimer = new QTimer();
