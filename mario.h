@@ -10,6 +10,7 @@
 #include <QList>
 #include <QSet>
 
+class pipe;
 class Mario : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -18,15 +19,25 @@ public:
     void setPlatforms(const QList<QGraphicsItem*>& platforms);
     int getLives();
     int getScore();
+    bool collidesHorizontally(double dx);
+    void setPipes(const QList<pipe*>& pipes);
+    void isCollidingWithPipes();
+
+
+
+
+
 
 private:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void isCollidingWithDynamicObstacles();
     void canTakeDamageTruthify();
+    void checkHorizontalCollisions();
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;
+    QList<pipe*> pipeList;
     QTimer* gravityTimer;
     QTimer* dynamicObstaclesTimer;
     QTimer* damageCoolDownTimer;
