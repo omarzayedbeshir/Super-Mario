@@ -23,7 +23,6 @@ public:
 
 
 private:
-
     QGraphicsPixmapItem* top_part;
     QGraphicsPixmapItem* bottom_part;
 
