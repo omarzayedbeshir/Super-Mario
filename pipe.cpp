@@ -7,7 +7,6 @@ pipe::pipe(qreal x, qreal y, QGraphicsItem* parent)
 {
     top_part = new QGraphicsPixmapItem(QPixmap(":/graphics/Mario Game Assets/PipeTop.png"));
     top_part->setPos(x, y);
-
     bottom_part = new QGraphicsPixmapItem(QPixmap(":/graphics/Mario Game Assets/PipeBottom.png"));
     bottom_part->setPos(x, y + top_part->boundingRect().height());
 

@@ -36,8 +36,9 @@ Game::Game(QWidget *parent)
     scene->addItem(platform2);
     scene->addItem(platform3);
 
-    pipe *pipe = new class pipe(400, 468);
-    scene->addItem(pipe);
+    // Setting up pipes
+    pipe *pipe1 = new pipe(400, 468);
+    scene->addItem(pipe1);
 
 
 
@@ -46,12 +47,10 @@ Game::Game(QWidget *parent)
     for (QGraphicsItem *item : allItems) {
         if (dynamic_cast<Platform*>(item)) {
             platforms.append(item);
+        } else if (dynamic_cast<pipe*>(item)) {
+            platforms.append(dynamic_cast<pipe*>(item)->getTopPart());
         }
     }
-
- 
-    platforms.append(pipe->getTopPart()); // Only top is solid
-
 
     // Setting up Mario
     Mario *mario = new Mario(450, 120, scene);
