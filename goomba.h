@@ -1,5 +1,5 @@
-#ifndef MARIO_H
-#define MARIO_H
+#ifndef GOOMBA_H
+#define GOOMBA_H
 
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
@@ -7,26 +7,29 @@
 #include <QObject>
 #include <QGraphicsView>
 #include <QList>
-#include <QSet>
 
-class Mario : public QObject, public QGraphicsRectItem
+class Goomba : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 public:
-    Mario(int x, int y);
+    Goomba(int x, int y);
     void setPlatforms(const QList<QGraphicsItem*>& platforms);
 
 private:
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
     QList<QGraphicsItem*> platformList;
     QTimer* gravityTimer;
-    float velocityY = 0;
-    float gravity = 0.4;
+    QTimer* moveTimer;
+    double velocityY = 0;
+    double gravity = 0.4;
+
+    int to_move = 200;
+    int moved = 0;
+    int direction = 1;
+
     bool onGround = false;
-    QSet<int> pressedKeys;
 private slots:
+    void move();
     void applyGravity();
 };
 
-#endif // MARIO_H
+#endif // GOOMBA_H

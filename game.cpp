@@ -4,6 +4,7 @@
 #include "platform.h"
 #include <QGraphicsView>
 #include "mario.h"
+#include "goomba.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -31,6 +32,9 @@ Game::Game(QWidget *parent)
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
 
+    Goomba *goomba1 = new Goomba(450, 240);
+    scene->addItem(goomba1);
+
     QList<QGraphicsItem*> allItems = scene->items();
     QList<QGraphicsItem*> platforms;
     for (QGraphicsItem *item : allItems) {
@@ -40,6 +44,7 @@ Game::Game(QWidget *parent)
     }
 
     mario->setPlatforms(platforms);
+    goomba1->setPlatforms(platforms);
 }
 
 Game::~Game()
