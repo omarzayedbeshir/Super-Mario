@@ -19,9 +19,7 @@ public:
     void setPlatforms(const QList<QGraphicsItem*>& platforms);
     int getLives();
     int getScore();
-    bool collidesHorizontally(double dx);
     void setPipes(const QList<pipe*>& pipes);
-    void isCollidingWithPipes();
 
 
 
@@ -33,7 +31,8 @@ private:
     void keyReleaseEvent(QKeyEvent *event);
     void isCollidingWithDynamicObstacles();
     void canTakeDamageTruthify();
-    void checkHorizontalCollisions();
+    void isCollidingWithPipes();
+
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;
@@ -49,6 +48,8 @@ private:
     bool onGround = false;
     bool canTakeDamage = true;
     int lives = 10;
+    bool canMoveRight;
+    bool canMoveLeft;
     QSet<int> pressedKeys;
 private slots:
     void applyGravity();
