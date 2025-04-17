@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include "goomba.h"
 #include <QPixmap>
+#include "pipe.h"
+
 
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
 
@@ -41,6 +43,10 @@ void Mario::setPlatforms(const QList<QGraphicsItem*>& platforms) {
     platformList = platforms;
 }
 
+void Mario::setPipes(const QList<pipe*>& pipes) {
+    pipeList = pipes;
+}
+
 void Mario::applyGravity() {
     velocityY += gravity;
 
@@ -61,7 +67,11 @@ void Mario::applyGravity() {
         }
     }
 }
-void Mario::isCollidingWithDynamicObstacles() {
+
+
+
+void Mario::isCollidingWithDynamicObstacles()
+{
     QList<QGraphicsItem*> collisions = collidingItems();
 
     for (QGraphicsItem* collision : collisions) {
@@ -91,9 +101,11 @@ void Mario::isCollidingWithDynamicObstacles() {
     }
 }
 
+
 void Mario::keyPressEvent(QKeyEvent *event)
 {
     pressedKeys.insert(event->key());
+
 
     if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
         if (onGround) {
@@ -112,10 +124,9 @@ void Mario::keyPressEvent(QKeyEvent *event)
             setPos(x() + 10, y());
         }
     } else if (pressedKeys.contains(Qt::Key_Left)) {
-        setPos(x() - 10, y());
+            setPos(x() - 10, y());
     } else if (pressedKeys.contains(Qt::Key_Right)) {
-        setPos(x() + 10, y());
-    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
+            setPos(x() + 10, y());    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
         if (onGround) {
             velocityY = -10.0;
             onGround = false;

@@ -7,6 +7,7 @@
 #include <QTimer>
 #include "mario.h"
 #include "goomba.h"
+#include "pipe.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -35,6 +36,11 @@ Game::Game(QWidget *parent)
     scene->addItem(platform2);
     scene->addItem(platform3);
 
+    pipe *pipe = new class pipe(400, 468);
+    scene->addItem(pipe);
+
+
+
     QList<QGraphicsItem*> allItems = scene->items();
     QList<QGraphicsItem*> platforms;
     for (QGraphicsItem *item : allItems) {
@@ -42,6 +48,10 @@ Game::Game(QWidget *parent)
             platforms.append(item);
         }
     }
+
+ 
+    platforms.append(pipe->getTopPart()); // Only top is solid
+
 
     // Setting up Mario
     Mario *mario = new Mario(450, 120, scene);
