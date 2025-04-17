@@ -88,7 +88,6 @@ void Mario::isCollidingWithPipes()
         {
             canMoveRight = false;
         }
-        // if Mario's left side is moving into the pipe's right side
         else if (pressedKeys.contains(Qt::Key_Left) &&
                  marioRect.left()  - eps < pipeTopRect.right() &&
                  marioRect.right() > pipeTopRect.right())
@@ -112,7 +111,6 @@ void Mario::applyGravity() {
     QList<QGraphicsItem*> collisions = collidingItems();
     onGround = false;
 
-    isCollidingWithPipes(); // New pipe collision check
 
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
@@ -165,6 +163,7 @@ void Mario::isCollidingWithDynamicObstacles()
 void Mario::keyPressEvent(QKeyEvent *event)
 {
     pressedKeys.insert(event->key());
+    isCollidingWithPipes();
 
 
     if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {

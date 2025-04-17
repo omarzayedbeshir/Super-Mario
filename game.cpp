@@ -73,7 +73,7 @@ Game::Game(QWidget *parent)
 
     // Setting up Enemies
     Goomba *goomba1 = new Goomba(450, 240);
-    Goomba *goomba2 = new Goomba(450, 400);
+    Goomba *goomba2 = new Goomba(450, 470);
     Goomba *goomba3 = new Goomba(450, 850);
     Goomba *goomba4 = new Goomba(450, 1600);
     Goomba *goomba5 = new Goomba(450, 1900);
@@ -82,6 +82,13 @@ Game::Game(QWidget *parent)
     goomba3->setPlatforms(platforms);
     goomba4->setPlatforms(platforms);
     goomba5->setPlatforms(platforms);
+    goomba1->setPipes(pipes);
+    goomba2->setPipes(pipes);
+    goomba3->setPipes(pipes);
+    goomba4->setPipes(pipes);
+    goomba5->setPipes(pipes);
+
+
     scene->addItem(goomba1);
     scene->addItem(goomba2);
     scene->addItem(goomba3);
