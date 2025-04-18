@@ -9,7 +9,7 @@
 
 
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
-    setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
     setPos(y, x);
     currentScene = scene;
@@ -58,19 +58,19 @@ void Mario::updateAnimation() {
     bool leftPressed = pressedKeys.contains(Qt::Key_Left);
     bool rightPressed = pressedKeys.contains(Qt::Key_Right);
     if (!(leftPressed || rightPressed) && onGround) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
         return;
     } else if (!onGround) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump.png"));
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump_" + horizontalDirection +".png"));
         return;
     } else if (leftPressed && rightPressed) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
         return;
     }
 
     currentRunFrame = (currentRunFrame + 1) % 3;
-    QString filename = QString(":graphics/Mario Game Assets/Mario_Small_Run%1.png").arg(currentRunFrame + 1);
-    setPixmap(QPixmap(filename));
+
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
 }
 
 void Mario::isCollidingWithPipes()
@@ -188,6 +188,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
         } else {
             setPos(x() - 10, y());
         }
+        horizontalDirection = "Left";
     } else if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Right)) {
         if (onGround) {
             velocityY = -7.1;
@@ -196,10 +197,13 @@ void Mario::keyPressEvent(QKeyEvent *event)
         } else {
             setPos(x() + 10, y());
         }
+        horizontalDirection = "Right";
     } else if (pressedKeys.contains(Qt::Key_Left) && canMoveLeft) {
         setPos(x() - 10, y());
+        horizontalDirection = "Left";
     } else if (pressedKeys.contains(Qt::Key_Right) && canMoveRight) {
         setPos(x() + 10, y());
+        horizontalDirection = "Right";
     } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
         if (onGround) {
             velocityY = -10.0;

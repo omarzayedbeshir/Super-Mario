@@ -29,11 +29,6 @@
         <file>Mario Game Assets/Mario_Big_Run3.png</file>
         <file>Mario Game Assets/Mario_Big_Slide.png</file>
         <file>Mario Game Assets/Mario_Small_Death.png</file>
-        <file>Mario Game Assets/Mario_Small_Idle.png</file>
-        <file>Mario Game Assets/Mario_Small_Jump.png</file>
-        <file>Mario Game Assets/Mario_Small_Run1.png</file>
-        <file>Mario Game Assets/Mario_Small_Run2.png</file>
-        <file>Mario Game Assets/Mario_Small_Run3.png</file>
         <file>Mario Game Assets/1upMushroom.png</file>
         <file>Mario Game Assets/Brick.png</file>
         <file>Mario Game Assets/Bush1.png</file>
@@ -49,5 +44,15 @@
         <file>Mario Game Assets/Tiles/blocks.png</file>
         <file>Mario Game Assets/Tiles/enemies.png</file>
         <file>Mario Game Assets/Tiles/mario_and_items.png</file>
+        <file>Mario Game Assets/Mario_Small_Idle_Right.png</file>
+        <file>Mario Game Assets/Mario_Small_Jump_Right.png</file>
+        <file>Mario Game Assets/Mario_Small_Run1_Right.png</file>
+        <file>Mario Game Assets/Mario_Small_Run2_Right.png</file>
+        <file>Mario Game Assets/Mario_Small_Run3_Right.png</file>
+        <file>Mario Game Assets/Mario_Small_Idle_Left.png</file>
+        <file>Mario Game Assets/Mario_Small_Run2_Left.png</file>
+        <file>Mario Game Assets/Mario_Small_Run1_Left.png</file>
+        <file>Mario Game Assets/Mario_Small_Run3_Left.png</file>
+        <file>Mario Game Assets/Mario_Small_Jump_Left.png</file>
     </qresource>
 </RCC>
