@@ -341,7 +341,7 @@ void Mario::takeDamage(int amount) {
             currentScene->clear();
             return;
         }
-        mariodeathSound->play();
+        //mariodeathSound->play();
         setPos(120,450);
     }
 }
