@@ -53,10 +53,10 @@ Game::Game(QWidget *parent)
 
 
     // Setting up pipes
-    pipe *pipe1 = new pipe(400, 435);
+    pipe *pipe1 = new pipe(400, 435, 2.0);
     scene->addItem(pipe1);
-    pipe *pipe2 = new pipe(1800, 435); // Example positions
-    pipe *pipe3 = new pipe(1100, 435);
+    pipe *pipe2 = new pipe(1800, 435, 2); // Example positions
+    pipe *pipe3 = new pipe(1100, 435, 2);
     scene->addItem(pipe2);
     scene->addItem(pipe3);
 

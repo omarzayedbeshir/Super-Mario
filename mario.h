@@ -34,6 +34,7 @@ private:
     void canTakeDamageTruthify();
     void isCollidingWithPipes();
     void updateAnimation();
+    void resetAfterDeath();
 
 
     QSoundEffect* jumpSound;

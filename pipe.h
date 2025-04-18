@@ -13,7 +13,7 @@ class pipe : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    pipe(qreal x, qreal y, QGraphicsItem* parent = nullptr);
+    pipe(qreal x, qreal y, double s, QGraphicsItem* parent = nullptr);
 
     QRectF boundingRect() const override;
 

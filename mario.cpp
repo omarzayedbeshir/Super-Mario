@@ -188,11 +188,9 @@ void Mario::checkFlagCollision() {
     if (winTriggered || !finishFlag)
         return;
 
-    // get the actual pixmap item for the flag cloth
 
     auto poleSprite = finishFlag->getFlag();
 
-    // see if Mario is really touching that pixmap
     if (collidingItems().contains(poleSprite)) {
         winTriggered = true;
 
@@ -207,7 +205,6 @@ void Mario::checkFlagCollision() {
         // 3) ride the flag down
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
 
-        // 4) at the end, pop the “You Win!” dialog
         connect(finishFlag, &Flag::animationFinished, this, [](){
             QMessageBox::information(nullptr,
                                      "You Win!",
@@ -226,6 +223,11 @@ void Mario::jump()
 void Mario::updatePosition() {
     applyPhysics();
     setPos(x() + velocityX, y() + velocityY);
+
+    if (y() > 700 && !winTriggered) {
+        resetAfterDeath();
+        return;
+    }
 
     QList<QGraphicsItem*> collisions = collidingItems();
     for (QGraphicsItem* platform : platformList) {
@@ -271,6 +273,8 @@ void Mario::applyPhysics()
     if (!onGround) {
         velocityY += gravity;
     }
+
+
 }
 
 void Mario::isCollidingWithDynamicObstacles()
@@ -291,18 +295,30 @@ void Mario::isCollidingWithDynamicObstacles()
                 score += 100;
                 goombaHitSound->play();
             } else if (canTakeDamage) {
-                lives--;
                 canTakeDamage = false;
                 damageCoolDownTimer->start(1500);
-                //velocityY = -15.0;
-                onGround = false;
-
-                if (lives == 0) {
-                    currentScene->clear();
-                }
+                resetAfterDeath();
             }
         }
     }
+}
+
+void Mario::resetAfterDeath() {
+    lives--;
+
+    if (lives <= 0) {
+        QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
+        currentScene->clear();
+        return;
+    }
+
+    // Reset position to start (adjust to your starting point)
+    setPos(120, 450);
+
+    // Reset state
+    velocityY = 0;
+    onGround = false;
+    pressedKeys.clear();
 }
 
 
