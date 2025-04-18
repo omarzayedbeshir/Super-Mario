@@ -343,6 +343,7 @@ void Mario::takeDamage(int amount) {
         }
         //mariodeathSound->play();
         setPos(120,450);
+        *center=this->pos();
     }
 }
 
