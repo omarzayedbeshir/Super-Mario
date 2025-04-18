@@ -11,6 +11,8 @@
 #include <QSet>
 
 class pipe;
+class Flag;
+
 class Mario : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -20,6 +22,9 @@ public:
     int getLives();
     int getScore();
     void setPipes(const QList<pipe*>& pipes);
+    void setFinishFlag(Flag* flag);        // <— add this
+
+
 
 
 
@@ -33,6 +38,7 @@ private:
     void canTakeDamageTruthify();
     void isCollidingWithPipes();
     void updateAnimation();
+
 
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
@@ -53,10 +59,17 @@ private:
     int lives = 10;
     bool canMoveRight;
     bool canMoveLeft;
+    Flag* finishFlag = nullptr;
+    bool  winTriggered = false;
+
     QSet<int> pressedKeys;
     QString horizontalDirection = "Right";
 private slots:
     void applyGravity();
+    void checkFlagCollision();     // ← new
+    void onFlagSliding(int dy);     // new
+
+
 };
 
 #endif // MARIO_H
