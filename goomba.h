@@ -24,8 +24,10 @@ public:
 private:
     QList<QGraphicsItem*> platformList;
     QList<pipe*> pipeList;
+    void updateAnimation();
     QTimer* gravityTimer;
     QTimer* moveTimer;
+    QTimer* runAnimationTimer;
     double velocityY = 0;
     double gravity = 0.4;
     double scale = 2.0;
@@ -35,6 +37,7 @@ private:
     int height = 16 * scale;
     bool onGround = false;
     bool canMove;
+    int currentRunFrame = 1;
 private slots:
     void move();
     void applyGravity();
