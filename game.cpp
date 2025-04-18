@@ -17,7 +17,7 @@ Game::Game(QWidget *parent)
     current_level = 1;
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 3000, 600);
+    scene->setSceneRect(0, 0, 6000, 600);
     QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
     backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     scene->setBackgroundBrush(backgroundImage);
@@ -35,10 +35,20 @@ Game::Game(QWidget *parent)
     // Setting up platforms
     Platform *platform1 = new Platform(100, 500, 600, 30);
     Platform *platform2 = new Platform(800, 500, 600, 30);
-    Platform *platform3 = new Platform(1500, 500, 600, 30);
+    Platform *platform3 = new Platform(1500, 500, 1000, 30);
+    Platform *platform4 = new Platform(2600, 500, 800, 30);
+    Platform *platform5 = new Platform(3500, 500, 1000, 30);
+    Platform *platform6 = new Platform(4650, 500, 500, 30);
+
+
+
     scene->addItem(platform1);
     scene->addItem(platform2);
     scene->addItem(platform3);
+    scene->addItem(platform4);
+    scene->addItem(platform5);
+    scene->addItem(platform6);
+
 
     // Setting up pipes
     pipe *pipe1 = new pipe(400, 435);
