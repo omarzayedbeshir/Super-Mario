@@ -57,5 +57,7 @@
         <file>Mario Game Assets/Background_2.png</file>
         <file>Mario Game Assets/smb_jump-small.wav</file>
         <file>Mario Game Assets/smb_fireball.wav</file>
+        <file>Mario Game Assets/Stage Win.wav</file>
+        <file>Mario Game Assets/Mario Death.wav</file>
     </qresource>
 </RCC>

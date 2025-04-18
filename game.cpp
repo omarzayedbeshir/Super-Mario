@@ -116,7 +116,6 @@ Game::Game(QWidget *parent)
     scene->addItem(goomba4);
     scene->addItem(goomba5);
 
-
     // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
     scoreText->setPlainText("Score: 0");
@@ -134,17 +133,27 @@ Game::Game(QWidget *parent)
 
     livesText->setPos(10, 40);
 
+    QGraphicsTextItem* healthText = new QGraphicsTextItem();
+    healthText->setPlainText("Heath: 100");
+    healthText->setDefaultTextColor(Qt::white);
+    healthText->setFont(QFont("Arial", 16));
+    scene->addItem(healthText);
+
+    healthText->setPos(10, 70);
+
     *center=mario->pos();
     QTimer* cameraTimer = new QTimer();
-    connect(cameraTimer, &QTimer::timeout, this, [this, mario, scoreText, livesText]() {
+    connect(cameraTimer, &QTimer::timeout, this, [this, mario, scoreText, livesText, healthText]() {
+        livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
+        scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
+        healthText->setPlainText("Heath: " + QString::number(mario->getHealth()));
         if(mario->pos().x()>center->x()){
             *center=mario->pos();
         }
         view->centerOn(*center);
-        livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
-        scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
         scoreText->setPos(view->mapToScene(10, 10));
         livesText->setPos(view->mapToScene(10, 40));
+        healthText->setPos(view->mapToScene(10, 70));
     });
     cameraTimer->start(1);
 }

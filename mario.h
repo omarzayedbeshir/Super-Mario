@@ -11,8 +11,10 @@
 #include <QSet>
 #include <QSoundEffect>
 
+
 class pipe;
 class Flag;
+class Goomba;
 
 class Mario : public QObject, public QGraphicsPixmapItem
 {
@@ -22,8 +24,13 @@ public:
     void setPlatforms(const QList<QGraphicsItem*>& platforms);
     int getLives();
     int getScore();
+    int getHealth() const;
+
     void setPipes(const QList<pipe*>& pipes);
-    void setFinishFlag(Flag* flag);        // <— add this
+    void setFinishFlag(Flag* flag);
+    void setGoombas(const QList<Goomba*>& goombas);
+
+
 
 private:
     void handleSideCollision(const QRectF& marioRect, const QRectF& obstacleRect);
@@ -34,11 +41,14 @@ private:
     void canTakeDamageTruthify();
     void isCollidingWithPipes();
     void updateAnimation();
-    void resetAfterDeath();
+    void takeDamage(int amount);
 
 
     QSoundEffect* jumpSound;
     QSoundEffect* goombaHitSound;
+    QSoundEffect* stagewinSound;
+    QSoundEffect* mariodeathSound;
+
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;
@@ -59,7 +69,8 @@ private:
     int score = 0;
     int height = 16 * scale;
     bool canTakeDamage = true;
-    int lives = 10;
+    int lives = 5;
+    int health = 100;
     bool canMoveRight;
     bool canMoveLeft;
     Flag* finishFlag = nullptr;
@@ -69,6 +80,10 @@ private:
     bool isJumping;
     bool isFacingRight;
     bool onGround;
+    QGraphicsTextItem* healthText;
+
+
+
 
     QSet<int> pressedKeys;
     QString horizontalDirection = "Right";
