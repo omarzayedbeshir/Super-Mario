@@ -57,6 +57,7 @@ private:
     QTimer* dynamicObstaclesTimer;
     QTimer* damageCoolDownTimer;
     QTimer* runAnimationTimer;
+    QPointF *center;
     int currentRunFrame = 0;
     double velocityX;
     double velocityY = 0;

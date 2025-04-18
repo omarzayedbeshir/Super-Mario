@@ -24,6 +24,8 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     isFacingRight(true),
     onGround(false)
 {
+    center=new QPointF;
+    *center=this->pos();
 
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
@@ -242,9 +244,10 @@ void Mario::jump()
 void Mario::updatePosition() {
     applyPhysics();
     setPos(x() + velocityX, y() + velocityY);
-
+    if(this->pos().x()>center->x()){
+        *center=this->pos();
+    }
     if (y() > 700 && !winTriggered && canTakeDamage) {
-
         takeDamage(20);
         goombaHitSound->play();
         setPos(120,450);
@@ -283,7 +286,8 @@ void Mario::applyPhysics()
         isFacingRight = true;
     }
     else if (isMovingLeft) {
-        velocityX -= acceleration;
+        if(this->x()>=center->x()-400) velocityX -= acceleration;
+        else velocityX = 0;
         isFacingRight = false;
     }
 
@@ -378,40 +382,6 @@ void Mario::keyPressEvent(QKeyEvent *event)
         QGraphicsPixmapItem::keyPressEvent(event);
         break;
     }
-    /*if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
-        if (onGround) {
-            velocityY = -7.1;
-            setPos(x() - 7.1, y());
-            onGround = false;
-            jumpSound->play();
-        } else {
-            setPos(x() - 10, y());
-        }
-        horizontalDirection = "Left";
-    } else if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Right)) {
-        if (onGround) {
-            velocityY = -7.1;
-            setPos(x() + 7.1, y());
-            onGround = false;
-            jumpSound->play();
-        } else {
-            setPos(x() + 10, y());
-        }
-        horizontalDirection = "Right";
-    } else if (pressedKeys.contains(Qt::Key_Left) && canMoveLeft) {
-        setPos(x() - 10, y());
-        horizontalDirection = "Left";
-    } else if (pressedKeys.contains(Qt::Key_Right) && canMoveRight) {
-        setPos(x() + 10, y());
-        horizontalDirection = "Right";
-    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
-        if (onGround) {
-            velocityY = -10.0;
-            onGround = false;
-            jumpSound->play();
-        }
-    }*/
-
 }
 
 void Mario::keyReleaseEvent(QKeyEvent *event)
