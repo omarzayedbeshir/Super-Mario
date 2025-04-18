@@ -313,8 +313,6 @@ void Mario::resetAfterDeath() {
     }
 
     // Reset position to start (adjust to your starting point)
-    setPos(120, 450);
-
     // Reset state
     velocityY = 0;
     onGround = false;
