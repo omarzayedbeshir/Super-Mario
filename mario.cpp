@@ -24,6 +24,7 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     isFacingRight(true),
     onGround(false)
 {
+
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
     jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
@@ -32,6 +33,14 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     goombaHitSound->setVolume(1);
     goombaHitSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_fireball.wav"));
 
+    stagewinSound = new QSoundEffect(this);
+    stagewinSound->setVolume(1);
+    stagewinSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/Stage Win.wav"));
+
+    mariodeathSound = new QSoundEffect(this);
+    mariodeathSound->setVolume(1);
+    mariodeathSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/Mario Death.wav"));
+
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
     setPos(y, x);
@@ -39,6 +48,7 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     gravityTimer = new QTimer(this);
     connect(gravityTimer, &QTimer::timeout, this, &Mario::updatePosition);
     gravityTimer->start(16);
+
 
     dynamicObstaclesTimer = new QTimer(this);
     connect(dynamicObstaclesTimer, &QTimer::timeout, this, &Mario::isCollidingWithDynamicObstacles);
@@ -59,6 +69,11 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
     runAnimationTimer->start(100);
+}
+
+
+int Mario::getHealth() const {
+    return health;
 }
 
 void Mario::canTakeDamageTruthify() {
@@ -83,6 +98,7 @@ void Mario::setPipes(const QList<pipe*>& pipes) {
 void Mario::setFinishFlag(Flag* flag) {
     finishFlag = flag;
 }
+
 
 void Mario::updateAnimation() {
     bool leftPressed = pressedKeys.contains(Qt::Key_Left);
@@ -198,12 +214,15 @@ void Mario::checkFlagCollision() {
         gravityTimer->stop();
         dynamicObstaclesTimer->stop();
         runAnimationTimer->stop();
+        stagewinSound->play();
+
 
         // 2) start the slide‑down
         finishFlag->startFlagAnimation();
 
         // 3) ride the flag down
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
+
 
         connect(finishFlag, &Flag::animationFinished, this, [](){
             QMessageBox::information(nullptr,
@@ -224,11 +243,14 @@ void Mario::updatePosition() {
     applyPhysics();
     setPos(x() + velocityX, y() + velocityY);
 
-    if (y() > 700 && !winTriggered) {
-        resetAfterDeath();
-        setPos(120, 450);
+    if (y() > 700 && !winTriggered && canTakeDamage) {
+
+        takeDamage(20);
+        goombaHitSound->play();
+        setPos(120,450);
         return;
     }
+
 
     QList<QGraphicsItem*> collisions = collidingItems();
     for (QGraphicsItem* platform : platformList) {
@@ -296,29 +318,36 @@ void Mario::isCollidingWithDynamicObstacles()
                 score += 100;
                 goombaHitSound->play();
             } else if (canTakeDamage) {
-                canTakeDamage = false;
-                damageCoolDownTimer->start(1500);
-                resetAfterDeath();
+
+                takeDamage(20);
+                goombaHitSound->play();
+
+                }
             }
         }
     }
-}
 
-void Mario::resetAfterDeath() {
-    lives--;
 
-    if (lives <= 0) {
-        QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
-        currentScene->clear();
-        return;
+void Mario::takeDamage(int amount) {
+    if (!canTakeDamage) return;
+    canTakeDamage = false;
+    health -= amount;
+    damageCoolDownTimer->start(1000);
+        if (health <= 0) {
+        lives--;
+        health = 100;
+        if (lives <= 0) {
+            QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
+            currentScene->clear();
+            return;
+        }
+        mariodeathSound->play();
+        setPos(120,450);
     }
-
-    // Reset position to start (adjust to your starting point)
-    // Reset state
-    velocityY = 0;
-    onGround = false;
-    pressedKeys.clear();
 }
+
+
+
 
 
 void Mario::keyPressEvent(QKeyEvent *event)
