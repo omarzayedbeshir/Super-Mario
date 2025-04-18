@@ -9,7 +9,6 @@
 
 
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
-
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
     setScale(scale);
     setPos(y, x);
@@ -29,6 +28,10 @@ Mario::Mario(int x, int y, QGraphicsScene* scene) {
     QTimer* pipeCollisionTimer = new QTimer(this);
     connect(pipeCollisionTimer, &QTimer::timeout, this, &Mario::isCollidingWithPipes);
     pipeCollisionTimer->start(16);
+
+    runAnimationTimer = new QTimer(this);
+    connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
+    runAnimationTimer->start(100);
 }
 
 void Mario::canTakeDamageTruthify() {
@@ -51,7 +54,24 @@ void Mario::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
 
+void Mario::updateAnimation() {
+    bool leftPressed = pressedKeys.contains(Qt::Key_Left);
+    bool rightPressed = pressedKeys.contains(Qt::Key_Right);
+    if (!(leftPressed || rightPressed) && onGround) {
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+        return;
+    } else if (!onGround) {
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump.png"));
+        return;
+    } else if (leftPressed && rightPressed) {
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle.png"));
+        return;
+    }
 
+    currentRunFrame = (currentRunFrame + 1) % 3;
+    QString filename = QString(":graphics/Mario Game Assets/Mario_Small_Run%1.png").arg(currentRunFrame + 1);
+    setPixmap(QPixmap(filename));
+}
 
 void Mario::isCollidingWithPipes()
 {
@@ -94,13 +114,8 @@ void Mario::isCollidingWithPipes()
         {
             canMoveLeft = false;
         }
-
-
-
     }
 }
-
-
 
 void Mario::applyGravity() {
     velocityY += gravity;
@@ -165,7 +180,6 @@ void Mario::keyPressEvent(QKeyEvent *event)
     pressedKeys.insert(event->key());
     isCollidingWithPipes();
 
-
     if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
         if (onGround) {
             velocityY = -7.1;
@@ -183,14 +197,16 @@ void Mario::keyPressEvent(QKeyEvent *event)
             setPos(x() + 10, y());
         }
     } else if (pressedKeys.contains(Qt::Key_Left) && canMoveLeft) {
-            setPos(x() - 10, y());
+        setPos(x() - 10, y());
     } else if (pressedKeys.contains(Qt::Key_Right) && canMoveRight) {
-            setPos(x() + 10, y());    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
+        setPos(x() + 10, y());
+    } else if (pressedKeys.contains(Qt::Key_Space) || pressedKeys.contains(Qt::Key_Up)) {
         if (onGround) {
             velocityY = -10.0;
             onGround = false;
         }
     }
+
 }
 
 void Mario::keyReleaseEvent(QKeyEvent *event)

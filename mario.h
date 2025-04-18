@@ -32,6 +32,7 @@ private:
     void isCollidingWithDynamicObstacles();
     void canTakeDamageTruthify();
     void isCollidingWithPipes();
+    void updateAnimation();
 
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
@@ -40,6 +41,8 @@ private:
     QTimer* gravityTimer;
     QTimer* dynamicObstaclesTimer;
     QTimer* damageCoolDownTimer;
+    QTimer* runAnimationTimer;
+    int currentRunFrame = 0;
     double velocityY = 0;
     double gravity = 0.4;
     double scale = 2.0;
