@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QSet>
+#include <QSoundEffect>
 
 class pipe;
 class Mario : public QObject, public QGraphicsPixmapItem
@@ -33,7 +34,7 @@ private:
     void canTakeDamageTruthify();
     void isCollidingWithPipes();
     void updateAnimation();
-
+    QSoundEffect* jumpSound;
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;

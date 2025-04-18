@@ -7,8 +7,10 @@
 #include <QPixmap>
 #include "pipe.h"
 
-
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
+    jumpSound = new QSoundEffect(this);
+    jumpSound->setVolume(1);
+    jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
     setPos(y, x);
@@ -177,6 +179,7 @@ void Mario::isCollidingWithDynamicObstacles()
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
+
     pressedKeys.insert(event->key());
     isCollidingWithPipes();
 
@@ -185,6 +188,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
             velocityY = -7.1;
             setPos(x() - 7.1, y());
             onGround = false;
+            jumpSound->play();
         } else {
             setPos(x() - 10, y());
         }
@@ -194,6 +198,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
             velocityY = -7.1;
             setPos(x() + 7.1, y());
             onGround = false;
+            jumpSound->play();
         } else {
             setPos(x() + 10, y());
         }
@@ -208,6 +213,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
         if (onGround) {
             velocityY = -10.0;
             onGround = false;
+            jumpSound->play();
         }
     }
 
