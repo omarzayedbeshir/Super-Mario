@@ -35,6 +35,7 @@ private:
     void isCollidingWithPipes();
     void updateAnimation();
     QSoundEffect* jumpSound;
+    QSoundEffect* goombaHitSound;
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;
