@@ -141,7 +141,9 @@ Game::Game(QWidget *parent)
 
     healthText->setPos(10, 70);
 
+    center = new QPointF;
     *center=mario->pos();
+
     QTimer* cameraTimer = new QTimer();
     connect(cameraTimer, &QTimer::timeout, this, [this, mario, scoreText, livesText, healthText]() {
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
