@@ -226,6 +226,7 @@ void Mario::updatePosition() {
 
     if (y() > 700 && !winTriggered) {
         resetAfterDeath();
+        setPos(120, 450);
         return;
     }
 
