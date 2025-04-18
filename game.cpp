@@ -134,20 +134,17 @@ Game::Game(QWidget *parent)
 
     livesText->setPos(10, 40);
 
-    QTimer* statsUpdater = new QTimer();
-    connect(statsUpdater, &QTimer::timeout, this, [this, mario, scoreText, livesText]() {
+    *center=mario->pos();
+    QTimer* cameraTimer = new QTimer();
+    connect(cameraTimer, &QTimer::timeout, this, [this, mario, scoreText, livesText]() {
+        if(mario->pos().x()>center->x()){
+            *center=mario->pos();
+        }
+        view->centerOn(*center);
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
         scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
-
         scoreText->setPos(view->mapToScene(10, 10));
         livesText->setPos(view->mapToScene(10, 40));
-    });
-    statsUpdater->start(1);
-    view->centerOn(mario);
-
-    QTimer* cameraTimer = new QTimer();
-    connect(cameraTimer, &QTimer::timeout, this, [this, mario]() {
-        view->centerOn(mario);
     });
     cameraTimer->start(1);
 }

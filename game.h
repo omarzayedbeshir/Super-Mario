@@ -27,5 +27,6 @@ private:
     int current_level;
     QGraphicsScene *scene;
     QGraphicsView *view;
+    QPointF *center;
 };
 #endif // GAME_H
