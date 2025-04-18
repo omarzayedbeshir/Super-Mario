@@ -16,6 +16,17 @@ Goomba::Goomba(int x, int y) {
 
     gravityTimer->start(16);
     moveTimer->start(16);
+
+    runAnimationTimer = new QTimer(this);
+    connect(runAnimationTimer, &QTimer::timeout, this, &Goomba::updateAnimation);
+    runAnimationTimer->start(100);
+}
+
+void Goomba::updateAnimation() {
+    currentRunFrame = (currentRunFrame + 1) % 2;
+
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Goomba_Walk" + QString::number(currentRunFrame + 1) +".png"));
+
 }
 
 void Goomba::setPlatforms(const QList<QGraphicsItem*>& platforms) {
