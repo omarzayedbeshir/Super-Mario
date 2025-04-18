@@ -43,8 +43,8 @@ Game::Game(QWidget *parent)
     // Setting up pipes
     pipe *pipe1 = new pipe(400, 435);
     scene->addItem(pipe1);
-    pipe *pipe2 = new pipe(1700, 435); // Example positions
-    pipe *pipe3 = new pipe(1000, 435);
+    pipe *pipe2 = new pipe(1800, 435); // Example positions
+    pipe *pipe3 = new pipe(1100, 435);
     scene->addItem(pipe2);
     scene->addItem(pipe3);
 
@@ -78,9 +78,9 @@ Game::Game(QWidget *parent)
     // Setting up Enemies
     Goomba *goomba1 = new Goomba(450, 240);
     Goomba *goomba2 = new Goomba(450, 470);
-    Goomba *goomba3 = new Goomba(450, 850);
+    Goomba *goomba3 = new Goomba(450, 966);
     Goomba *goomba4 = new Goomba(450, 1600);
-    Goomba *goomba5 = new Goomba(450, 1900);
+    Goomba *goomba5 = new Goomba(450, 1870);
     goomba1->setPlatforms(platforms);
     goomba2->setPlatforms(platforms);
     goomba3->setPlatforms(platforms);
