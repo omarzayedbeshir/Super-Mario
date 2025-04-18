@@ -6,6 +6,9 @@
 #include "goomba.h"
 #include <QPixmap>
 #include "pipe.h"
+#include "flag.h"
+#include <QMessageBox>
+
 
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
     jumpSound = new QSoundEffect(this);
@@ -36,6 +39,10 @@ Mario::Mario(int x, int y, QGraphicsScene* scene) {
     connect(pipeCollisionTimer, &QTimer::timeout, this, &Mario::isCollidingWithPipes);
     pipeCollisionTimer->start(16);
 
+    QTimer* flagCollisionTimer = new QTimer(this);
+    connect(flagCollisionTimer, &QTimer::timeout, this, &Mario::checkFlagCollision);
+    flagCollisionTimer->start(16);
+
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
     runAnimationTimer->start(100);
@@ -60,6 +67,9 @@ void Mario::setPlatforms(const QList<QGraphicsItem*>& platforms) {
 void Mario::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
+void Mario::setFinishFlag(Flag* flag) {
+    finishFlag = flag;
+}
 
 void Mario::updateAnimation() {
     bool leftPressed = pressedKeys.contains(Qt::Key_Left);
@@ -79,6 +89,8 @@ void Mario::updateAnimation() {
 
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
 }
+
+
 
 void Mario::isCollidingWithPipes()
 {
@@ -153,6 +165,48 @@ void Mario::preventApproaching(const QRectF& marioRect, const QRectF& obstacleRe
     }
 }
 
+
+void Mario::onFlagSliding(int dy) {
+    setY(qMin(y() + dy, 470.0));
+}
+
+
+void Mario::checkFlagCollision() {
+    if (winTriggered || !finishFlag)
+        return;
+
+    // get the actual pixmap item for the flag cloth
+
+    auto poleSprite = finishFlag->getFlag();
+
+    // see if Mario is really touching that pixmap
+    if (collidingItems().contains(poleSprite)) {
+        winTriggered = true;
+
+        // 1) stop Mario’s movement
+        gravityTimer->stop();
+        dynamicObstaclesTimer->stop();
+        runAnimationTimer->stop();
+
+        // 2) start the slide‑down
+        finishFlag->startFlagAnimation();
+
+        // 3) ride the flag down
+        connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
+
+        // 4) at the end, pop the “You Win!” dialog
+        connect(finishFlag, &Flag::animationFinished, this, [](){
+            QMessageBox::information(nullptr,
+                                     "You Win!",
+                                     "Congratulations! You reached the flag!");
+        });
+    }
+}
+
+
+
+
+
 void Mario::applyGravity() {
     velocityY += gravity;
 
@@ -174,7 +228,6 @@ void Mario::applyGravity() {
         }
     }
 }
-
 
 void Mario::isCollidingWithDynamicObstacles()
 {
@@ -211,6 +264,7 @@ void Mario::isCollidingWithDynamicObstacles()
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
+    if (winTriggered) return;   
 
     pressedKeys.insert(event->key());
     isCollidingWithPipes();

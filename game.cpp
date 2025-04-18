@@ -9,6 +9,8 @@
 #include "goomba.h"
 #include "pipe.h"
 #include <QPixmap>
+#include "flag.h"
+
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -38,7 +40,7 @@ Game::Game(QWidget *parent)
     Platform *platform3 = new Platform(1500, 500, 1000, 30);
     Platform *platform4 = new Platform(2600, 500, 800, 30);
     Platform *platform5 = new Platform(3500, 500, 1000, 30);
-    Platform *platform6 = new Platform(4650, 500, 500, 30);
+    Platform *platform6 = new Platform(4550, 500, 500, 30);
 
 
 
@@ -81,6 +83,11 @@ Game::Game(QWidget *parent)
     scene->addItem(mario);
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
+
+    Flag* finishFlag = new Flag(4850, 180);
+    scene->addItem(finishFlag);
+
+    mario->setFinishFlag(finishFlag);
 
 
     setFixedSize(800, 600);
