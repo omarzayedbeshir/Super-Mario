@@ -11,6 +11,11 @@ Mario::Mario(int x, int y, QGraphicsScene* scene) {
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
     jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
+
+    goombaHitSound = new QSoundEffect(this);
+    goombaHitSound->setVolume(1);
+    goombaHitSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_fireball.wav"));
+
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
     setPos(y, x);
@@ -161,6 +166,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 currentScene->removeItem(goomba);
                 delete goomba;
                 score += 100;
+                goombaHitSound->play();
             } else if (canTakeDamage) {
                 lives--;
                 canTakeDamage = false;
