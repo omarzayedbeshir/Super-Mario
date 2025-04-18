@@ -27,6 +27,10 @@ QGraphicsPixmapItem* pipe::getTopPart() const {
     return top_part;
 }
 
+QGraphicsPixmapItem* pipe::getBottomPart() const {
+    return bottom_part;
+}
+
 
 
 QRectF pipe::boundingRect() const

@@ -28,6 +28,8 @@ public:
 
 
 private:
+    void handleSideCollision(const QRectF& marioRect, const QRectF& obstacleRect);
+    void preventApproaching(const QRectF& marioRect, const QRectF& obstacleRect);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     void isCollidingWithDynamicObstacles();
