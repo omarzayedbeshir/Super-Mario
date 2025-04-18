@@ -8,8 +8,9 @@
 #include <QObject>
 #include <QGraphicsView>
 #include <QList>
+#include "dynamicobstacle.h"
 
-class Goomba : public QObject, public QGraphicsPixmapItem
+class Goomba : public DynamicObstacle
 {
     Q_OBJECT
 public:
