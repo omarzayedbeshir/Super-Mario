@@ -54,7 +54,7 @@ private:
     bool canMoveRight;
     bool canMoveLeft;
     QSet<int> pressedKeys;
-    QString horizontalDirection = "Left";
+    QString horizontalDirection = "Right";
 private slots:
     void applyGravity();
 };
