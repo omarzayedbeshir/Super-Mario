@@ -212,17 +212,14 @@ void Mario::checkFlagCollision() {
     if (collidingItems().contains(poleSprite)) {
         winTriggered = true;
 
-        // 1) stop Mario’s movement
         gravityTimer->stop();
         dynamicObstaclesTimer->stop();
         runAnimationTimer->stop();
         stagewinSound->play();
 
 
-        // 2) start the slide‑down
         finishFlag->startFlagAnimation();
 
-        // 3) ride the flag down
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
 
 

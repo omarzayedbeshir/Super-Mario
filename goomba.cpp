@@ -85,13 +85,10 @@ void Goomba::move() {
     isCollidingWithPipes();
 
     if (!canMove) {
-        // on collision: flip and reset your patrol count
         direction *= -1;
         moved = 0;
-        // --and immediately step away from the obstacle:
         setPos(x() + 1 * direction, y());
     } else {
-        // no obstacle: go about your normal patrol
         setPos(x() + 1 * direction, y());
         moved++;
         if (moved >= to_move) {

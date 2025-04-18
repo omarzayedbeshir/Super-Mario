@@ -93,8 +93,8 @@ private slots:
     void updatePosition();
     void applyPhysics();
     void jump();
-    void checkFlagCollision();     // ← new
-    void onFlagSliding(int dy);     // new
+    void checkFlagCollision();
+    void onFlagSliding(int dy);
 
 
 };
