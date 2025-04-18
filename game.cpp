@@ -183,7 +183,7 @@ Game::Game(QWidget *parent)
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
         scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
         healthText->setPlainText("Heath: " + QString::number(mario->getHealth()));
-        if(mario->pos().x()>center->x() || mario->pos().x() < center->x() - 400){
+        if(mario->pos().x()>center->x() || mario->pos().x() == 120){
             *center=mario->pos();
         }
         view->centerOn(*center);
