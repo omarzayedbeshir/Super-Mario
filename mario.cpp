@@ -10,7 +10,20 @@
 #include <QMessageBox>
 
 
-Mario::Mario(int x, int y, QGraphicsScene* scene) {
+Mario::Mario(int x, int y, QGraphicsScene* scene):
+    velocityX(0),
+    velocityY(0),
+    gravity(0.8),
+    jumpForce(15),
+    acceleration(0.3),
+    maxSpeed(5),
+    friction(0.3),
+    isMovingLeft(false),
+    isMovingRight(false),
+    isJumping(false),
+    isFacingRight(true),
+    onGround(false)
+{
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
     jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
@@ -24,7 +37,7 @@ Mario::Mario(int x, int y, QGraphicsScene* scene) {
     setPos(y, x);
     currentScene = scene;
     gravityTimer = new QTimer(this);
-    connect(gravityTimer, &QTimer::timeout, this, &Mario::applyGravity);
+    connect(gravityTimer, &QTimer::timeout, this, &Mario::updatePosition);
     gravityTimer->start(16);
 
     dynamicObstaclesTimer = new QTimer(this);
@@ -203,29 +216,60 @@ void Mario::checkFlagCollision() {
     }
 }
 
+void Mario::jump()
+{
+    velocityY = -jumpForce;
+    isJumping = true;
+    onGround = false;
+}
 
-
-
-
-void Mario::applyGravity() {
-    velocityY += gravity;
-
-    double dy = velocityY;
-    setPos(x(), y() + dy);
+void Mario::updatePosition() {
+    applyPhysics();
+    setPos(x() + velocityX, y() + velocityY);
 
     QList<QGraphicsItem*> collisions = collidingItems();
-    onGround = false;
-
-
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
             if (velocityY > 0) {
                 setPos(x(), platform->y() - height);
                 onGround = true;
-                velocityY = 0;
+                isJumping=false;
             }
-            break;
+            return;
         }
+    }
+    onGround=false;
+}
+
+void Mario::applyPhysics()
+{
+
+    if(isMovingRight==isMovingLeft){
+        if (velocityX > 0) {
+            velocityX -= friction;
+            if (velocityX < 0) velocityX = 0;
+        } else if (velocityX < 0) {
+            velocityX += friction;
+            if (velocityX > 0) velocityX = 0;
+        }
+    }
+    else if (isMovingRight) {
+        velocityX += acceleration;
+        isFacingRight = true;
+    }
+    else if (isMovingLeft) {
+        velocityX -= acceleration;
+        isFacingRight = false;
+    }
+
+    if (velocityX > maxSpeed) {
+        velocityX = maxSpeed;
+    } else if (velocityX < -maxSpeed) {
+        velocityX = -maxSpeed;
+    }
+
+    if (!onGround) {
+        velocityY += gravity;
     }
 }
 
@@ -268,8 +312,29 @@ void Mario::keyPressEvent(QKeyEvent *event)
 
     pressedKeys.insert(event->key());
     isCollidingWithPipes();
-
-    if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
+    switch(event->key()) {
+    case Qt::Key_Left:
+        //if(!isJumping) isMovingLeft = true;
+        isMovingLeft = true;
+        horizontalDirection = "Left";
+        break;
+    case Qt::Key_Right:
+        //if(!isJumping) isMovingRight = true;
+        isMovingRight = true;
+        horizontalDirection = "Right";
+        break;
+    case Qt::Key_Space:
+    case Qt::Key_Up:
+        if (onGround && !isJumping) {
+            jump();
+            jumpSound->play();
+        }
+        break;
+    default:
+        QGraphicsPixmapItem::keyPressEvent(event);
+        break;
+    }
+    /*if (pressedKeys.contains(Qt::Key_Up) && pressedKeys.contains(Qt::Key_Left)) {
         if (onGround) {
             velocityY = -7.1;
             setPos(x() - 7.1, y());
@@ -301,11 +366,26 @@ void Mario::keyPressEvent(QKeyEvent *event)
             onGround = false;
             jumpSound->play();
         }
-    }
+    }*/
 
 }
 
 void Mario::keyReleaseEvent(QKeyEvent *event)
 {
     pressedKeys.remove(event->key());
+    switch(event->key()) {
+    case Qt::Key_Left:
+        isMovingLeft = false;
+        break;
+    case Qt::Key_Right:
+        isMovingRight = false;
+        break;
+    case Qt::Key_Space:
+    case Qt::Key_Up:
+        isJumping = false;
+        break;
+    default:
+        QGraphicsPixmapItem::keyReleaseEvent(event);
+        break;
+    }
 }

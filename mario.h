@@ -47,23 +47,35 @@ private:
     QTimer* damageCoolDownTimer;
     QTimer* runAnimationTimer;
     int currentRunFrame = 0;
+    double velocityX;
     double velocityY = 0;
     double gravity = 0.4;
+    double jumpForce;
+    double acceleration;
+    double maxSpeed;
+    double friction;
     double scale = 2.0;
     int score = 0;
     int height = 16 * scale;
-    bool onGround = false;
     bool canTakeDamage = true;
     int lives = 10;
     bool canMoveRight;
     bool canMoveLeft;
     Flag* finishFlag = nullptr;
     bool  winTriggered = false;
+    bool isMovingLeft;
+    bool isMovingRight;
+    bool isJumping;
+    bool isFacingRight;
+    bool onGround;
 
     QSet<int> pressedKeys;
     QString horizontalDirection = "Right";
+
 private slots:
-    void applyGravity();
+    void updatePosition();
+    void applyPhysics();
+    void jump();
     void checkFlagCollision();     // ← new
     void onFlagSliding(int dy);     // new
 
