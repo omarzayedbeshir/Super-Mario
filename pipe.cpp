@@ -2,15 +2,15 @@
 #include "mario.h"
 #include <QPixmap>
 
-pipe::pipe(qreal x, qreal y, QGraphicsItem* parent)
+pipe::pipe(qreal x, qreal y, double s, QGraphicsItem* parent)
     : QObject(), QGraphicsItemGroup(parent)
 {
     top_part = new QGraphicsPixmapItem(QPixmap(":/graphics/Mario Game Assets/PipeTop.png"));
-    top_part->setScale(2.0); // Double the size
+    top_part->setScale(s); // Double the size
     top_part->setPos(x, y);
 
     bottom_part = new QGraphicsPixmapItem(QPixmap(":/graphics/Mario Game Assets/PipeBottom.png"));
-    bottom_part->setScale(2.0);
+    bottom_part->setScale(s);
     // Position bottom part correctly considering scaled height
     bottom_part->setPos(x, y + top_part->boundingRect().height() * 2);
 
