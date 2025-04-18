@@ -282,7 +282,7 @@ void Mario::applyPhysics()
         isFacingRight = true;
     }
     else if (isMovingLeft) {
-        if(this->x()>=center->x()-400) velocityX -= acceleration;
+        if(this->x()>center->x()-400) velocityX -= acceleration;
         else velocityX = 0;
         isFacingRight = false;
     }
