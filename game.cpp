@@ -8,6 +8,7 @@
 #include "mario.h"
 #include "goomba.h"
 #include "pipe.h"
+#include <QPixmap>
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -17,6 +18,9 @@ Game::Game(QWidget *parent)
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 3000, 600);
+    QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
+    backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    scene->setBackgroundBrush(backgroundImage);
 
     view = new QGraphicsView(this);
     view->setScene(scene);
