@@ -18,8 +18,7 @@ public:
     QRectF boundingRect() const override;
 
     QGraphicsPixmapItem* getTopPart() const;
-
-    bool collidesHorizontally(double dx, Mario* mario);
+    QGraphicsPixmapItem* getBottomPart() const;
 
 
 private:

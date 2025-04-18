@@ -82,43 +82,72 @@ void Mario::updateAnimation() {
 
 void Mario::isCollidingWithPipes()
 {
-    const qreal collisionThreshold = 5.0;
     canMoveRight = true;
-    canMoveLeft  = true;
+    canMoveLeft = true;
 
-    const qreal eps = 4.0;
-
+    QRectF marioRect = this->sceneBoundingRect();
 
     for (pipe* p : pipeList) {
         QGraphicsPixmapItem* topPart = p->getTopPart();
         QRectF pipeTopRect = topPart->sceneBoundingRect();
-        QRectF marioRect = this->sceneBoundingRect();
 
-        bool verticalCollision =
-            (marioRect.bottom() >= pipeTopRect.top() - collisionThreshold) &&
-            (marioRect.bottom() <= pipeTopRect.top() + collisionThreshold);
+        QGraphicsPixmapItem* bodyPart = p->getBottomPart();
+        QRectF pipeBodyRect = bodyPart->sceneBoundingRect();
 
-        bool horizontalOverlap =
-            marioRect.right() > pipeTopRect.left() &&
-            marioRect.left() < pipeTopRect.right();
+        bool landingOnTop =
+            (marioRect.bottom() >= pipeTopRect.top() - 5) &&
+            (marioRect.bottom() <= pipeTopRect.top() + 5) &&
+            (marioRect.right() > pipeTopRect.left() + 5) &&
+            (marioRect.left() < pipeTopRect.right() - 5) &&
+            velocityY >= 0;
 
-        if (verticalCollision && horizontalOverlap && velocityY >= 0) {
+        if (landingOnTop) {
             setPos(x(), pipeTopRect.top() - marioRect.height());
             onGround = true;
             velocityY = 0;
-            return;
+            continue;
         }
 
-        if (pressedKeys.contains(Qt::Key_Right) &&
-            marioRect.right() + eps > pipeTopRect.left() &&
-            marioRect.left() < pipeTopRect.left())
-        {
+        if (marioRect.intersects(pipeTopRect) && marioRect.bottom() > pipeTopRect.top() + 5) {
+            handleSideCollision(marioRect, pipeTopRect);
+        }
+
+        if (marioRect.intersects(pipeBodyRect)) {
+            handleSideCollision(marioRect, pipeBodyRect);
+        }
+
+        preventApproaching(marioRect, pipeTopRect);
+
+        preventApproaching(marioRect, pipeBodyRect);
+    }
+}
+
+void Mario::handleSideCollision(const QRectF& marioRect, const QRectF& obstacleRect)
+{
+    double leftOverlap = marioRect.right() - obstacleRect.left();
+    double rightOverlap = obstacleRect.right() - marioRect.left();
+
+    if (leftOverlap < rightOverlap && leftOverlap > 0) {
+        setPos(obstacleRect.left() - marioRect.width(), y());
+        canMoveRight = false;
+    } else if (rightOverlap > 0) {
+        setPos(obstacleRect.right(), y());
+        canMoveLeft = false;
+    }
+}
+
+void Mario::preventApproaching(const QRectF& marioRect, const QRectF& obstacleRect)
+{
+    if (!marioRect.intersects(obstacleRect)) {
+        QRectF nextPosRight = marioRect;
+        nextPosRight.translate(10, 0);
+        if (nextPosRight.intersects(obstacleRect)) {
             canMoveRight = false;
         }
-        else if (pressedKeys.contains(Qt::Key_Left) &&
-                 marioRect.left()  - eps < pipeTopRect.right() &&
-                 marioRect.right() > pipeTopRect.right())
-        {
+
+        QRectF nextPosLeft = marioRect;
+        nextPosLeft.translate(-10, 0);
+        if (nextPosLeft.intersects(obstacleRect)) {
             canMoveLeft = false;
         }
     }
@@ -145,9 +174,6 @@ void Mario::applyGravity() {
         }
     }
 }
-
-
-
 
 
 void Mario::isCollidingWithDynamicObstacles()
