@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     dynamicobstacle.cpp \
+    flag.cpp \
     goomba.cpp \
     main.cpp \
     game.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     dynamicobstacle.h \
+    flag.h \
     game.h \
     goomba.h \
     mario.h \
