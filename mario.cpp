@@ -250,7 +250,6 @@ void Mario::updatePosition() {
     if (y() > 700 && !winTriggered && canTakeDamage) {
         takeDamage(100);
         goombaHitSound->play();
-        setPos(120,450);
         return;
     }
 
