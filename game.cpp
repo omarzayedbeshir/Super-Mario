@@ -54,16 +54,29 @@ Game::Game(QWidget *parent)
 
     // Setting up pipes
     pipe *pipe1 = new pipe(400, 435, 2.0);
+    pipe *pipe2 = new pipe(1100, 435, 2); // Example positions
+    pipe *pipe3 = new pipe(1800, 435, 2);
+    pipe *pipe4 = new pipe(2100, 435, 2);
+    pipe *pipe5 = new pipe(2900, 435, 2);
+    pipe *pipe6 = new pipe(3550, 435, 2);
+    pipe *pipe7 = new pipe(4050, 435, 2);
     scene->addItem(pipe1);
-    pipe *pipe2 = new pipe(1800, 435, 2); // Example positions
-    pipe *pipe3 = new pipe(1100, 435, 2);
     scene->addItem(pipe2);
     scene->addItem(pipe3);
+    scene->addItem(pipe4);
+    scene->addItem(pipe5);
+    scene->addItem(pipe6);
+    scene->addItem(pipe7);
 
     QList<pipe*> pipes;
     pipes.append(pipe1);
     pipes.append(pipe2);
     pipes.append(pipe3);
+    pipes.append(pipe4);
+    pipes.append(pipe5);
+    pipes.append(pipe6);
+    pipes.append(pipe7);
+
 
 
 
@@ -98,16 +111,32 @@ Game::Game(QWidget *parent)
     Goomba *goomba3 = new Goomba(450, 966);
     Goomba *goomba4 = new Goomba(450, 1600);
     Goomba *goomba5 = new Goomba(450, 1870);
+    Goomba *goomba6 = new Goomba(450, 2200);
+    Goomba *goomba7 = new Goomba(450, 3150);
+    Goomba *goomba8 = new Goomba(450, 3800);
+    Goomba *goomba9 = new Goomba(450, 4150);
+
     goomba1->setPlatforms(platforms);
     goomba2->setPlatforms(platforms);
     goomba3->setPlatforms(platforms);
     goomba4->setPlatforms(platforms);
     goomba5->setPlatforms(platforms);
+    goomba6->setPlatforms(platforms);
+    goomba7->setPlatforms(platforms);
+    goomba8->setPlatforms(platforms);
+    goomba9->setPlatforms(platforms);
+
+
     goomba1->setPipes(pipes);
     goomba2->setPipes(pipes);
     goomba3->setPipes(pipes);
     goomba4->setPipes(pipes);
     goomba5->setPipes(pipes);
+    goomba6->setPipes(pipes);
+    goomba7->setPipes(pipes);
+    goomba8->setPipes(pipes);
+    goomba9->setPipes(pipes);
+
 
 
     scene->addItem(goomba1);
@@ -115,6 +144,11 @@ Game::Game(QWidget *parent)
     scene->addItem(goomba3);
     scene->addItem(goomba4);
     scene->addItem(goomba5);
+    scene->addItem(goomba6);
+    scene->addItem(goomba7);
+    scene->addItem(goomba8);
+    scene->addItem(goomba9);
+
 
     // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
