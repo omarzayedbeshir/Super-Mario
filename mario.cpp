@@ -10,8 +10,15 @@
 #include <QMessageBox>
 
 
-
 Mario::Mario(int x, int y, QGraphicsScene* scene) {
+    jumpSound = new QSoundEffect(this);
+    jumpSound->setVolume(1);
+    jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
+
+    goombaHitSound = new QSoundEffect(this);
+    goombaHitSound->setVolume(1);
+    goombaHitSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_fireball.wav"));
+
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
     setPos(y, x);
@@ -212,6 +219,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 currentScene->removeItem(goomba);
                 delete goomba;
                 score += 100;
+                goombaHitSound->play();
             } else if (canTakeDamage) {
                 lives--;
                 canTakeDamage = false;
@@ -230,7 +238,7 @@ void Mario::isCollidingWithDynamicObstacles()
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
-    if (winTriggered) return;   // no more walking/jumping
+    if (winTriggered) return;   
 
     pressedKeys.insert(event->key());
     isCollidingWithPipes();
@@ -240,6 +248,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
             velocityY = -7.1;
             setPos(x() - 7.1, y());
             onGround = false;
+            jumpSound->play();
         } else {
             setPos(x() - 10, y());
         }
@@ -249,6 +258,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
             velocityY = -7.1;
             setPos(x() + 7.1, y());
             onGround = false;
+            jumpSound->play();
         } else {
             setPos(x() + 10, y());
         }
@@ -263,6 +273,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
         if (onGround) {
             velocityY = -10.0;
             onGround = false;
+            jumpSound->play();
         }
     }
 

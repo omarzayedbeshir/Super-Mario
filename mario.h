@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QSet>
+#include <QSoundEffect>
 
 class pipe;
 class Flag;
@@ -40,6 +41,8 @@ private:
     void updateAnimation();
 
 
+    QSoundEffect* jumpSound;
+    QSoundEffect* goombaHitSound;
     QGraphicsScene* currentScene;
     QList<QGraphicsItem*> platformList;
     QList<QGraphicsItem*> dynamicObstaclesList;
