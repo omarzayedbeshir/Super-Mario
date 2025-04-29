@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 
 KoopaTroopa::KoopaTroopa(int x, int y) {
-    setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk1.png"));
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk1_Right.png"));
     setScale(scale);
     setPos(y, x);
 
@@ -25,8 +25,11 @@ KoopaTroopa::KoopaTroopa(int x, int y) {
 void KoopaTroopa::updateAnimation() {
     currentRunFrame = (currentRunFrame + 1) % 2;
 
-    setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +".png"));
-
+    if (direction == 1)
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Right.png"));
+    else {
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Left.png"));
+    }
 }
 
 void KoopaTroopa::setPlatforms(const QList<QGraphicsItem*>& platforms) {
