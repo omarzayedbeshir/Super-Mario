@@ -7,6 +7,7 @@
 #include <QTimer>
 #include "mario.h"
 #include "goomba.h"
+#include "koopatroopa.h"
 #include "pipe.h"
 #include <QPixmap>
 #include "flag.h"
@@ -115,6 +116,7 @@ Game::Game(QWidget *parent)
     Goomba *goomba7 = new Goomba(450, 3150);
     Goomba *goomba8 = new Goomba(450, 3800);
     Goomba *goomba9 = new Goomba(450, 4150);
+    KoopaTroopa *koopa1 = new KoopaTroopa(450, 3000);
 
     goomba1->setPlatforms(platforms);
     goomba2->setPlatforms(platforms);
@@ -125,6 +127,8 @@ Game::Game(QWidget *parent)
     goomba7->setPlatforms(platforms);
     goomba8->setPlatforms(platforms);
     goomba9->setPlatforms(platforms);
+
+    koopa1->setPlatforms(platforms);
 
 
     goomba1->setPipes(pipes);
@@ -137,7 +141,7 @@ Game::Game(QWidget *parent)
     goomba8->setPipes(pipes);
     goomba9->setPipes(pipes);
 
-
+    koopa1->setPipes(pipes);
 
     scene->addItem(goomba1);
     scene->addItem(goomba2);
@@ -149,6 +153,7 @@ Game::Game(QWidget *parent)
     scene->addItem(goomba8);
     scene->addItem(goomba9);
 
+    scene->addItem(koopa1);
 
     // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();

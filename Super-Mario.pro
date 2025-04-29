@@ -12,6 +12,7 @@ SOURCES += \
     dynamicobstacle.cpp \
     flag.cpp \
     goomba.cpp \
+    koopatroopa.cpp \
     main.cpp \
     game.cpp \
     mario.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     flag.h \
     game.h \
     goomba.h \
+    koopatroopa.h \
     mario.h \
     pipe.h \
     platform.h
