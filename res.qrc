@@ -19,8 +19,6 @@
         <file>Mario Game Assets/Hill1.png</file>
         <file>Mario Game Assets/Hill2.png</file>
         <file>Mario Game Assets/Koopa_Shell.png</file>
-        <file>Mario Game Assets/Koopa_Walk1.png</file>
-        <file>Mario Game Assets/Koopa_Walk2.png</file>
         <file>Mario Game Assets/MagicMushroom.png</file>
         <file>Mario Game Assets/Mario_Big_Idle.png</file>
         <file>Mario Game Assets/Mario_Big_Jump.png</file>
@@ -59,5 +57,10 @@
         <file>Mario Game Assets/smb_fireball.wav</file>
         <file>Mario Game Assets/Stage Win.wav</file>
         <file>Mario Game Assets/Mario Death.wav</file>
+        <file>Mario Game Assets/Koopa_Walk1_Right.png</file>
+        <file>Mario Game Assets/Koopa_Walk2_Right.png</file>
+        <file>Mario Game Assets/Game Over (Super Mario) - QuickSounds.com.mp3</file>
+        <file>Mario Game Assets/Koopa_Walk1_Left.png</file>
+        <file>Mario Game Assets/Koopa_Walk2_Left.png</file>
     </qresource>
 </RCC>
