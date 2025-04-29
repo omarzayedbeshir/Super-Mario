@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include "goomba.h"
+#include "koopatroopa.h"
 #include <QPixmap>
 #include "pipe.h"
 #include "flag.h"
@@ -306,6 +307,7 @@ void Mario::isCollidingWithDynamicObstacles()
 
     for (QGraphicsItem* collision : collisions) {
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
+        KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
         if (goomba) {
             double marioBottom = y() + height;
             double goombaTop = goomba->y();
@@ -323,9 +325,24 @@ void Mario::isCollidingWithDynamicObstacles()
                 goombaHitSound->play();
 
                 }
+        } else if (koopa) {
+            double marioBottom = y() + height;
+            double koopaTop = koopa->y();
+
+            if (marioBottom <= koopaTop + koopa->getHeight() / 2) {
+                //velocityY = -1.0;
+                onGround = false;
+                currentScene->removeItem(koopa);
+                delete koopa;
+                score += 100;
+                goombaHitSound->play();
+            } else if (canTakeDamage) {
+                takeDamage(20);
+                goombaHitSound->play();
             }
         }
     }
+}
 
 
 void Mario::takeDamage(int amount) {
