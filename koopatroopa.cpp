@@ -23,12 +23,14 @@ KoopaTroopa::KoopaTroopa(int x, int y) {
 }
 
 void KoopaTroopa::updateAnimation() {
-    currentRunFrame = (currentRunFrame + 1) % 2;
+    if (status == "monitor") {
+        currentRunFrame = (currentRunFrame + 1) % 2;
 
-    if (direction == 1)
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Right.png"));
-    else {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Left.png"));
+        if (direction == 1)
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Right.png"));
+        else {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Walk" + QString::number(currentRunFrame + 1) +"_Left.png"));
+        }
     }
 }
 
@@ -86,23 +88,33 @@ void KoopaTroopa::isCollidingWithPipes()
 void KoopaTroopa::move() {
 
     isCollidingWithPipes();
-
-    if (!canMove) {
-        direction *= -1;
-        moved = 0;
-        setPos(x() + 1 * direction, y());
-    } else {
-        setPos(x() + 1 * direction, y());
-        moved++;
-        if (moved >= to_move) {
+    if (status == "monitor") {
+        if (!canMove) {
             direction *= -1;
             moved = 0;
+            setPos(x() + 1 * direction, y());
+        } else {
+            setPos(x() + 1 * direction, y());
+            moved++;
+            if (moved >= to_move) {
+                direction *= -1;
+                moved = 0;
+            }
         }
+    } else {
+        setPos(x() + 10, y());
     }
-
-
 }
 
 int KoopaTroopa::getHeight() {
     return height;
+}
+
+void KoopaTroopa::becomeCrazy() {
+    setPixmap(QPixmap(":graphics/Mario Game Assets/Koopa_Shell.png"));
+    status = "crazy";
+}
+
+QString KoopaTroopa::getStatus() {
+    return status;
 }
