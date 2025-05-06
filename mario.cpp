@@ -312,30 +312,48 @@ void Mario::isCollidingWithDynamicObstacles()
             double marioBottom = y() + height;
             double goombaTop = goomba->y();
 
-            if (marioBottom <= goombaTop + goomba->getHeight() / 2) {
+            if (marioBottom <= goombaTop + goomba->getHeight() / 2 && velocityY >= 0) {
                 //velocityY = -1.0;
+                jump();
+                jumpSound->play();
                 onGround = false;
                 currentScene->removeItem(goomba);
                 delete goomba;
                 score += 100;
                 goombaHitSound->play();
             } else if (canTakeDamage) {
-
                 takeDamage(20);
                 goombaHitSound->play();
-
-                }
-        } else if (koopa) {
+            }
+        } else if (koopa && koopa->getStatus() == "monitor") {
             double marioBottom = y() + height;
             double koopaTop = koopa->y();
 
-            if (marioBottom <= koopaTop + koopa->getHeight() / 2) {
+            if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                jump();
+                jumpSound->play();
                 //velocityY = -1.0;
                 onGround = false;
-                currentScene->removeItem(koopa);
-                delete koopa;
+                koopa->becomeCrazy();
+                //currentScene->removeItem(koopa);
+                //delete koopa;
                 score += 100;
                 goombaHitSound->play();
+                takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
+            } else if (canTakeDamage) {
+                takeDamage(20);
+                goombaHitSound->play();
+            }
+        } else if (koopa && koopa->getStatus() == "crazy") {
+            double marioBottom = y() + height;
+            double koopaTop = koopa->y();
+
+            if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                jump();
+                jumpSound->play();
+                onGround = false;
+                goombaHitSound->play();
+                takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
             } else if (canTakeDamage) {
                 takeDamage(20);
                 goombaHitSound->play();

@@ -9,6 +9,7 @@
 #include <QGraphicsView>
 #include <QList>
 #include "dynamicobstacle.h"
+#include <QString>
 
 class KoopaTroopa : public DynamicObstacle
 {
@@ -19,7 +20,8 @@ public:
     void setPipes(const QList<pipe*>& pipes);
     int getHeight();
     void isCollidingWithPipes();
-
+    void becomeCrazy();
+    QString getStatus();
 
 private:
     QList<QGraphicsItem*> platformList;
@@ -35,6 +37,7 @@ private:
     int moved = 0;
     int direction = 1;
     int height = 24 * scale;
+    QString status = "monitor"; // monitor, crazy
     bool onGround = false;
     bool canMove;
     int currentRunFrame = 1;
