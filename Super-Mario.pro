@@ -18,7 +18,8 @@ SOURCES += \
     mario.cpp \
     mushroom.cpp \
     pipe.cpp \
-    platform.cpp
+    platform.cpp \
+    star.cpp
 
 HEADERS += \
     dynamicobstacle.h \
@@ -29,7 +30,8 @@ HEADERS += \
     mario.h \
     mushroom.h \
     pipe.h \
-    platform.h
+    platform.h \
+    star.h
 
 FORMS += \
     game.ui
