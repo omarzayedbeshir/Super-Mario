@@ -11,6 +11,7 @@
 #include <QSet>
 #include "platform.h"
 #include <QSoundEffect>
+#include <QGraphicsColorizeEffect>
 
 
 class pipe;
@@ -33,6 +34,11 @@ public:
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);
     void getMushroom();
+    void collide_star();
+    void starman();
+
+
+
 
 
 private:
@@ -45,6 +51,8 @@ private:
     void isCollidingWithPipes();
     void updateAnimation();
     void takeDamage(int amount);
+    bool isStar();
+
 
 
     QSoundEffect* jumpSound;
@@ -60,7 +68,10 @@ private:
     QTimer* dynamicObstaclesTimer;
     QTimer* damageCoolDownTimer;
     QTimer* runAnimationTimer;
+    QTimer* glowTimer;
+
     QPointF *center;
+
     int currentRunFrame = 0;
     double velocityX;
     double velocityY = 0;
@@ -74,6 +85,7 @@ private:
     int score = 0;
     int height = 16 * scale;
     bool canTakeDamage = true;
+    bool be_star = false;
     int lives = 5;
     int health = 100;
     bool canMoveRight;
@@ -86,6 +98,11 @@ private:
     bool isJumping;
     bool isFacingRight;
     bool onGround;
+    bool glowState = false;
+
+    QGraphicsColorizeEffect* glowEffect = nullptr;
+
+
     QGraphicsTextItem* healthText;
 
 

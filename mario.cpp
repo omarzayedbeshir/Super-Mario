@@ -10,7 +10,9 @@
 #include "pipe.h"
 #include "flag.h"
 #include "mushroom.h"
+#include "star.h"
 #include <QMessageBox>
+#include <QGraphicsEffect>
 
 
 Mario::Mario(int x, int y, QGraphicsScene* scene):
@@ -75,6 +77,14 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     connect(mushroomTimer, &QTimer::timeout, this, &Mario::getMushroom);
     mushroomTimer->start(16);
 
+    QTimer* starTimer = new QTimer(this);
+    connect(starTimer, &QTimer::timeout, this, &Mario::collide_star);
+    starTimer->start(16);
+
+    glowEffect = new QGraphicsColorizeEffect(this);
+    glowEffect->setColor(Qt::yellow); // glowing yellow color
+    glowEffect->setStrength(0.8); // how strong the glow is
+
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
     runAnimationTimer->start(100);
@@ -119,6 +129,36 @@ void Mario::getMushroom() {
             return;
         }
     }
+}
+
+void Mario::collide_star() {
+    QList<QGraphicsItem*> collisions = collidingItems();
+    for (QGraphicsItem* collision : collisions) {
+        Star* star = dynamic_cast<Star*>(collision);
+        if (star) {
+            starman();
+            delete star;
+            return;}
+    }
+}
+
+void Mario::starman() {
+    playerState = "star";
+    be_star = true;
+    glowState = !glowState;  // toggle glow every time called
+
+    if (glowState) {
+        this->setGraphicsEffect(glowEffect); // apply glow
+    } else {
+        this->setGraphicsEffect(nullptr); // remove glow
+    }
+
+    QTimer::singleShot(5000, this, [this]() {
+        be_star = false;
+        becomeBase();
+        setGraphicsEffect(nullptr); // ensure glow removed
+
+    });
 }
 
 void Mario::becomeSuper() {
@@ -166,12 +206,27 @@ void Mario::updateAnimation() {
         currentRunFrame = (currentRunFrame + 1) % 3;
 
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
-    } else if (playerState == "fire") {
-        return;
+    } else if (playerState == "star") {
+
+        if (!(leftPressed || rightPressed) && onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
+            return;
+        } else if (!onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump_" + horizontalDirection +".png"));
+            return;
+        } else if (leftPressed && rightPressed) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
+            return;
+        }
+
+        currentRunFrame = (currentRunFrame + 1) % 3;
+
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
     }
 }
 
-
+bool Mario::isStar()  {
+    return be_star; }
 
 void Mario::isCollidingWithPipes()
 {
@@ -358,57 +413,77 @@ void Mario::isCollidingWithDynamicObstacles()
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
         KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
         if (goomba) {
-            double marioBottom = y() + height;
-            double goombaTop = goomba->y();
-
-            if (marioBottom <= goombaTop + goomba->getHeight() / 2 && velocityY >= 0) {
-                //velocityY = -1.0;
-                jump();
-                jumpSound->play();
-                onGround = false;
+            if (isStar()) {
                 currentScene->removeItem(goomba);
                 delete goomba;
                 score += 100;
                 goombaHitSound->play();
-            } else if (canTakeDamage) {
-                takeDamage(damageToTake);
-                becomeBase();
-                goombaHitSound->play();
+            } else {
+                double marioBottom = y() + height;
+                double goombaTop = goomba->y();
+
+                if (marioBottom <= goombaTop + goomba->getHeight() / 2 && velocityY >= 0) {
+                    //velocityY = -1.0;
+                    jump();
+                    jumpSound->play();
+                    onGround = false;
+                    currentScene->removeItem(goomba);
+                    delete goomba;
+                    score += 100;
+                    goombaHitSound->play();
+                } else if (canTakeDamage) {
+                    takeDamage(damageToTake);
+                    becomeBase();
+                    goombaHitSound->play();
+                }
             }
         } else if (koopa && koopa->getStatus() == "monitor") {
-            double marioBottom = y() + height;
-            double koopaTop = koopa->y();
-
-            if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
-                jump();
-                jumpSound->play();
-                //velocityY = -1.0;
-                onGround = false;
+            if (isStar()) {
                 koopa->becomeCrazy();
                 //currentScene->removeItem(koopa);
                 //delete koopa;
                 score += 100;
                 goombaHitSound->play();
-                takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
-            } else if (canTakeDamage) {
-                takeDamage(damageToTake);
-                becomeBase();
-                goombaHitSound->play();
+                takeDamage(0);
+            } else {
+                double marioBottom = y() + height;
+                double koopaTop = koopa->y();
+
+                if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                    jump();
+                    jumpSound->play();
+                    //velocityY = -1.0;
+                    onGround = false;
+                    koopa->becomeCrazy();
+                    //currentScene->removeItem(koopa);
+                    //delete koopa;
+                    score += 100;
+                    goombaHitSound->play();
+                    takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
+                } else if (canTakeDamage) {
+                    takeDamage(damageToTake);
+                    becomeBase();
+                    goombaHitSound->play();
+                }
             }
         } else if (koopa && koopa->getStatus() == "crazy") {
-            double marioBottom = y() + height;
-            double koopaTop = koopa->y();
-
-            if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
-                jump();
-                jumpSound->play();
-                onGround = false;
+            if (isStar()) {
                 goombaHitSound->play();
-                takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
-            } else if (canTakeDamage) {
-                takeDamage(damageToTake);
-                becomeBase();
-                goombaHitSound->play();
+                takeDamage(0);
+            } else {
+                double marioBottom = y() + height;
+                double koopaTop = koopa->y();
+                if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                    jump();
+                    jumpSound->play();
+                    onGround = false;
+                    goombaHitSound->play();
+                    takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
+                } else if (canTakeDamage) {
+                    takeDamage(damageToTake);
+                    becomeBase();
+                    goombaHitSound->play();
+                }
             }
         }
     }
@@ -416,6 +491,7 @@ void Mario::isCollidingWithDynamicObstacles()
 
 
 void Mario::takeDamage(int amount) {
+    if(be_star) return;
     if (!canTakeDamage) return;
     canTakeDamage = false;
     health -= amount;

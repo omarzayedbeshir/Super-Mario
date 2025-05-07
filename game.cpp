@@ -16,6 +16,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "star.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -127,6 +128,12 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         auto obj = val.toObject();
         Mushroom* mushroom = new Mushroom(obj["x"].toInt(), obj["y"].toInt());
         scene->addItem(mushroom);
+    }
+
+    for (auto val : root["stars"].toArray()) {
+        auto obj = val.toObject();
+        Star* star = new Star(obj["x"].toInt(), obj["y"].toInt());
+        scene->addItem(star);
     }
 
     for (auto val : root["goombas"].toArray()) {
