@@ -29,7 +29,7 @@ public:
     void setPipes(const QList<pipe*>& pipes);
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);
-
+    void getMushroom();
 
 
 private:
@@ -74,6 +74,7 @@ private:
     int health = 100;
     bool canMoveRight;
     bool canMoveLeft;
+    QString playerState = "base"; // base, super, fire
     Flag* finishFlag = nullptr;
     bool  winTriggered = false;
     bool isMovingLeft;
