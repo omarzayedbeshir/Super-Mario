@@ -115,6 +115,7 @@ void Mario::getMushroom() {
         if (mushroom) {
             playerState = "super";
             height = 32 * scale;
+            delete mushroom;
             return;
         }
     }
