@@ -54,7 +54,7 @@ Game::Game(QWidget *parent)
     scene->addItem(platform6);
 
     // Setting up powerups
-    Mushroom* mushroom1 = new Mushroom(170, 468);
+    Mushroom* mushroom1 = new Mushroom(1115, 405);
 
     scene->addItem(mushroom1);
 
