@@ -115,6 +115,7 @@ void Mario::getMushroom() {
         if (mushroom) {
             playerState = "super";
             height = 32 * scale;
+            damageToTake = 10;
             delete mushroom;
             return;
         }
@@ -359,7 +360,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 score += 100;
                 goombaHitSound->play();
             } else if (canTakeDamage) {
-                takeDamage(20);
+                takeDamage(damageToTake);
                 goombaHitSound->play();
             }
         } else if (koopa && koopa->getStatus() == "monitor") {
@@ -378,7 +379,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 goombaHitSound->play();
                 takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
             } else if (canTakeDamage) {
-                takeDamage(20);
+                takeDamage(damageToTake);
                 goombaHitSound->play();
             }
         } else if (koopa && koopa->getStatus() == "crazy") {
@@ -392,7 +393,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 goombaHitSound->play();
                 takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
             } else if (canTakeDamage) {
-                takeDamage(20);
+                takeDamage(damageToTake);
                 goombaHitSound->play();
             }
         }

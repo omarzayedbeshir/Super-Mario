@@ -67,6 +67,7 @@ private:
     double maxSpeed;
     double friction;
     double scale = 2.0;
+    int damageToTake = 20;
     int score = 0;
     int height = 16 * scale;
     bool canTakeDamage = true;
