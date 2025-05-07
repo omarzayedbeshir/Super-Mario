@@ -10,13 +10,14 @@
 #include <QList>
 #include "dynamicobstacle.h"
 #include <QString>
+#include "platform.h"
 
 class KoopaTroopa : public DynamicObstacle
 {
     Q_OBJECT
 public:
     KoopaTroopa(int x, int y);
-    void setPlatforms(const QList<QGraphicsItem*>& platforms);
+    void setPlatforms(const QList<Platform*>& platforms);
     void setPipes(const QList<pipe*>& pipes);
     int getHeight();
     void isCollidingWithPipes();
@@ -24,7 +25,7 @@ public:
     QString getStatus();
 
 private:
-    QList<QGraphicsItem*> platformList;
+    QList<Platform*> platformList;
     QList<pipe*> pipeList;
     void updateAnimation();
     QTimer* gravityTimer;

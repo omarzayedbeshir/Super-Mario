@@ -1,4 +1,5 @@
 #include "goomba.h"
+#include "platform.h"
 #include <QTimer>
 #include <QBrush>
 #include <QGraphicsView>
@@ -29,7 +30,7 @@ void Goomba::updateAnimation() {
 
 }
 
-void Goomba::setPlatforms(const QList<QGraphicsItem*>& platforms) {
+void Goomba::setPlatforms(const QList<Platform*>& platforms) {
     platformList = platforms;
 }
 

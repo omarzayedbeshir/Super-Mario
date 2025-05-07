@@ -1,4 +1,5 @@
 #include "koopatroopa.h"
+#include "platform.h"
 #include <QTimer>
 #include <QBrush>
 #include <QGraphicsView>
@@ -34,7 +35,7 @@ void KoopaTroopa::updateAnimation() {
     }
 }
 
-void KoopaTroopa::setPlatforms(const QList<QGraphicsItem*>& platforms) {
+void KoopaTroopa::setPlatforms(const QList<Platform*>& platforms) {
     platformList = platforms;
 }
 

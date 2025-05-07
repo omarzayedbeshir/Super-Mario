@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QGraphicsView>
 #include <QList>
+#include "platform.h"
 #include "dynamicobstacle.h"
 
 class Goomba : public DynamicObstacle
@@ -15,14 +16,14 @@ class Goomba : public DynamicObstacle
     Q_OBJECT
 public:
     Goomba(int x, int y);
-    void setPlatforms(const QList<QGraphicsItem*>& platforms);
+    void setPlatforms(const QList<Platform*>& platforms);
     void setPipes(const QList<pipe*>& pipes);
     int getHeight();
     void isCollidingWithPipes();
 
 
 private:
-    QList<QGraphicsItem*> platformList;
+    QList<Platform*> platformList;
     QList<pipe*> pipeList;
     void updateAnimation();
     QTimer* gravityTimer;
