@@ -26,6 +26,8 @@ public:
     int getScore();
     int getHealth() const;
 
+    void becomeBase();
+    void becomeSuper();
     void setPipes(const QList<pipe*>& pipes);
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);
