@@ -1,4 +1,5 @@
 #include "mario.h"
+#include "platform.h"
 #include <QTimer>
 #include <QBrush>
 #include <QGraphicsView>
@@ -96,7 +97,7 @@ int Mario::getScore() {
     return score;
 }
 
-void Mario::setPlatforms(const QList<QGraphicsItem*>& platforms) {
+void Mario::setPlatforms(const QList<Platform*>& platforms) {
     platformList = platforms;
 }
 

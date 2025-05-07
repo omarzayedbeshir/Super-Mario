@@ -3,6 +3,11 @@
 #include <QJsonArray>
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QGraphicsScene>
+#include "mario.h"
+#include "platform.h"
+#include "pipe.h"
+#include "flag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +26,7 @@ public:
     void loadPlayerPosition(const QJsonObject &levelData);
     void loadPlatforms(const QJsonArray &platforms);
     void loadEnemies(const QJsonArray &enemies);
+    Mario* renderLevel(int levelNumber, QGraphicsScene* scene);
 
 private:
     Ui::Game *ui;
@@ -28,5 +34,8 @@ private:
     QGraphicsScene *scene;
     QGraphicsView *view;
     QPointF *center;
+    QList<Platform*> platformsList;
+    QList<pipe*> pipesList;
+    Flag* finishFlag;
 };
 #endif // GAME_H
