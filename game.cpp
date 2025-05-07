@@ -21,7 +21,7 @@ Game::Game(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Game)
 {
-    current_level = 1;
+    current_level = 2;
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 6000, 600);
