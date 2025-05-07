@@ -113,13 +113,23 @@ void Mario::getMushroom() {
     for (QGraphicsItem* collision : collisions) {
         Mushroom* mushroom = dynamic_cast<Mushroom*>(collision);
         if (mushroom) {
-            playerState = "super";
-            height = 32 * scale;
-            damageToTake = 10;
+            becomeSuper();
             delete mushroom;
             return;
         }
     }
+}
+
+void Mario::becomeSuper() {
+    playerState = "super";
+    height = 32 * scale;
+    damageToTake = 0;
+}
+
+void Mario::becomeBase() {
+    playerState = "base";
+    height = 16 * scale;
+    damageToTake = 20;
 }
 
 void Mario::updateAnimation() {
@@ -361,6 +371,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 goombaHitSound->play();
             } else if (canTakeDamage) {
                 takeDamage(damageToTake);
+                becomeBase();
                 goombaHitSound->play();
             }
         } else if (koopa && koopa->getStatus() == "monitor") {
@@ -380,6 +391,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
             } else if (canTakeDamage) {
                 takeDamage(damageToTake);
+                becomeBase();
                 goombaHitSound->play();
             }
         } else if (koopa && koopa->getStatus() == "crazy") {
@@ -394,6 +406,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
             } else if (canTakeDamage) {
                 takeDamage(damageToTake);
+                becomeBase();
                 goombaHitSound->play();
             }
         }
