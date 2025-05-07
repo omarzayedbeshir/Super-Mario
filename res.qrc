@@ -68,5 +68,6 @@
         <file>Mario Game Assets/Mario_Big_Run2_Right.png</file>
         <file>Mario Game Assets/Mario_Big_Run3_Right.png</file>
         <file>Mario Game Assets/levels/level1.json</file>
+        <file>Mario Game Assets/levels/level2.json</file>
     </qresource>
 </RCC>

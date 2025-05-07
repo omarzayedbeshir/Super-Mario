@@ -137,7 +137,7 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         scene->addItem(goomba);
     }
 
-    for (auto val : root["koopas"].toArray()) {
+    for (auto val : root["koopa_troopas"].toArray()) {
         auto obj = val.toObject();
         KoopaTroopa* koopa = new KoopaTroopa(obj["x"].toInt(), obj["y"].toInt());
         koopa->setPlatforms(platformsList);
