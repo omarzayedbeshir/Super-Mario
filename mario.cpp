@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include "pipe.h"
 #include "flag.h"
+#include "mushroom.h"
 #include <QMessageBox>
 
 
@@ -69,6 +70,10 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     connect(flagCollisionTimer, &QTimer::timeout, this, &Mario::checkFlagCollision);
     flagCollisionTimer->start(16);
 
+    QTimer* mushroomTimer = new QTimer(this);
+    connect(mushroomTimer, &QTimer::timeout, this, &Mario::getMushroom);
+    mushroomTimer->start(16);
+
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
     runAnimationTimer->start(100);
@@ -102,24 +107,55 @@ void Mario::setFinishFlag(Flag* flag) {
     finishFlag = flag;
 }
 
+void Mario::getMushroom() {
+    QList<QGraphicsItem*> collisions = collidingItems();
+
+    for (QGraphicsItem* collision : collisions) {
+        Mushroom* mushroom = dynamic_cast<Mushroom*>(collision);
+        if (mushroom) {
+            playerState = "super";
+            height = 32 * scale;
+            return;
+        }
+    }
+}
 
 void Mario::updateAnimation() {
     bool leftPressed = pressedKeys.contains(Qt::Key_Left);
     bool rightPressed = pressedKeys.contains(Qt::Key_Right);
-    if (!(leftPressed || rightPressed) && onGround) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
-        return;
-    } else if (!onGround) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump_" + horizontalDirection +".png"));
-        return;
-    } else if (leftPressed && rightPressed) {
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
+    if (playerState == "base") {
+        if (!(leftPressed || rightPressed) && onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
+            return;
+        } else if (!onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump_" + horizontalDirection +".png"));
+            return;
+        } else if (leftPressed && rightPressed) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
+            return;
+        }
+
+        currentRunFrame = (currentRunFrame + 1) % 3;
+
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
+    } else if (playerState == "super") {
+        if (!(leftPressed || rightPressed) && onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Idle_" + horizontalDirection +".png"));
+            return;
+        } else if (!onGround) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Jump_" + horizontalDirection +".png"));
+            return;
+        } else if (leftPressed && rightPressed) {
+            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Idle_" + horizontalDirection +".png"));
+            return;
+        }
+
+        currentRunFrame = (currentRunFrame + 1) % 3;
+
+        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
+    } else if (playerState == "fire") {
         return;
     }
-
-    currentRunFrame = (currentRunFrame + 1) % 3;
-
-    setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
 }
 
 

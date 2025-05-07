@@ -7,6 +7,7 @@
 #include <QTimer>
 #include "mario.h"
 #include "goomba.h"
+#include "mushroom.h"
 #include "koopatroopa.h"
 #include "pipe.h"
 #include <QPixmap>
@@ -51,6 +52,11 @@ Game::Game(QWidget *parent)
     scene->addItem(platform4);
     scene->addItem(platform5);
     scene->addItem(platform6);
+
+    // Setting up powerups
+    Mushroom* mushroom1 = new Mushroom(170, 468);
+
+    scene->addItem(mushroom1);
 
 
     // Setting up pipes
