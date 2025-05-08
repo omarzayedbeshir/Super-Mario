@@ -17,6 +17,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "star.h"
+#include <QElapsedTimer>
+
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -96,7 +98,9 @@ Game::~Game()
 
 
 Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
-    scene->clear();
+    qDeleteAll(platformsList);
+    qDeleteAll(pipesList);
+    pipesList.clear();
     platformsList.clear();
     pipesList.clear();
 
@@ -105,6 +109,8 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         qDebug() << "Failed to open level file";
         return nullptr;
     }
+
+    scene->clear();
     QByteArray data = file.readAll();
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject root = doc.object();
@@ -171,5 +177,6 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         mario->setFocus();
         scene->addItem(mario);
     }
+
     return mario;
 }
