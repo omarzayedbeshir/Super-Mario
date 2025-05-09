@@ -117,10 +117,6 @@ int Mario::getScore() {
     return score;
 }
 
-void Mario::setPlatforms(const QList<Platform*>& platforms) {
-    platformList = platforms;
-}
-
 void Mario::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
@@ -367,10 +363,10 @@ void Mario::updatePosition() {
 
 
     QList<QGraphicsItem*> collisions = collidingItems();
-    for (QGraphicsItem* platform : platformList) {
-        if (collisions.contains(platform)) {
+    for (QGraphicsItem* collision : collisions) {
+        if (dynamic_cast<Platform*>(collision)) {
             if (velocityY > 0) {
-                setPos(x(), platform->y() - height);
+                setPos(x(), collision->y() - height);
                 onGround = true;
                 isJumping=false;
             }
