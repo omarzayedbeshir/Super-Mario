@@ -23,7 +23,6 @@ class Mario : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     Mario(int x, int y, QGraphicsScene* scene);
-    void setPlatforms(const QList<Platform*>& platforms);
     int getLives();
     int getScore();
     int getHealth() const;
@@ -61,8 +60,6 @@ private:
     QSoundEffect* mariodeathSound;
 
     QGraphicsScene* currentScene;
-    QList<Platform*> platformList;
-    QList<QGraphicsItem*> dynamicObstaclesList;
     QList<pipe*> pipeList;
     QTimer* gravityTimer;
     QTimer* dynamicObstaclesTimer;

@@ -8,11 +8,10 @@
 #include <QObject>
 #include <QGraphicsView>
 #include <QList>
-#include "dynamicobstacle.h"
 #include <QString>
 #include "platform.h"
 
-class KoopaTroopa : public DynamicObstacle
+class KoopaTroopa :  public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
