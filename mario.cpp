@@ -136,6 +136,7 @@ void Mario::collide_star() {
     for (QGraphicsItem* collision : collisions) {
         Star* star = dynamic_cast<Star*>(collision);
         if (star) {
+            becomeBase();
             starman();
             delete star;
             return;}
@@ -220,8 +221,6 @@ void Mario::updateAnimation() {
         }
 
         currentRunFrame = (currentRunFrame + 1) % 3;
-        height = 16 * scale;
-        becomeBase();
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
     }
 }
