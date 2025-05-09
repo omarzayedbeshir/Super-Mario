@@ -39,7 +39,6 @@ void KoopaTroopa::setPlatforms(const QList<Platform*>& platforms) {
     platformList = platforms;
 }
 
-
 void KoopaTroopa::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
@@ -65,8 +64,7 @@ void KoopaTroopa::applyGravity() {
     }
 }
 
-void KoopaTroopa::isCollidingWithPipes()
-{
+void KoopaTroopa::isCollidingWithPipes() {
     canMove  = true;
     const qreal eps = 2.0;
 
@@ -86,6 +84,7 @@ void KoopaTroopa::isCollidingWithPipes()
         }
     }
 }
+
 void KoopaTroopa::move() {
 
     isCollidingWithPipes();

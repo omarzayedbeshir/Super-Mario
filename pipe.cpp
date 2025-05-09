@@ -13,7 +13,6 @@ pipe::pipe(qreal x, qreal y, double s, QGraphicsItem* parent)
     bottom_part->setScale(s);
     bottom_part->setPos(x, y + top_part->boundingRect().height() * 2);
 
-
     addToGroup(top_part);
     addToGroup(bottom_part);
 
@@ -29,8 +28,6 @@ QGraphicsPixmapItem* pipe::getTopPart() const {
 QGraphicsPixmapItem* pipe::getBottomPart() const {
     return bottom_part;
 }
-
-
 
 QRectF pipe::boundingRect() const
 {

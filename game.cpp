@@ -45,8 +45,6 @@ Game::Game(QWidget *parent)
     // Setting up Mario
     Mario *mario = renderLevel(current_level, scene);
 
-
-
     // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
     scoreText->setPlainText("Score: 0");
@@ -95,7 +93,6 @@ Game::~Game()
 {
     delete ui;
 }
-
 
 Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
     qDeleteAll(platformsList);

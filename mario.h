@@ -32,8 +32,7 @@ public:
     void setPipes(const QList<pipe*>& pipes);
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);
-    void getMushroom();
-    void collide_star();
+    void getPowerup();
     void starman();
 
     void timerFunctions();
