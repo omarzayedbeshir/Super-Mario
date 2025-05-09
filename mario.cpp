@@ -263,7 +263,7 @@ void Mario::preventApproaching(const QRectF& marioRect, const QRectF& obstacleRe
 }
 
 void Mario::onFlagSliding(int dy) {
-    setY(qMin(y() + dy, 470.0));
+    setY(qMin(y() + dy, 500.0 - height));
 }
 
 void Mario::checkFlagCollision() {
