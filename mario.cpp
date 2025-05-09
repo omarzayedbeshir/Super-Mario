@@ -56,7 +56,6 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     connect(gravityTimer, &QTimer::timeout, this, &Mario::updatePosition);
     gravityTimer->start(16);
 
-
     dynamicObstaclesTimer = new QTimer(this);
     connect(dynamicObstaclesTimer, &QTimer::timeout, this, &Mario::isCollidingWithDynamicObstacles);
     dynamicObstaclesTimer->start(16);
@@ -65,29 +64,13 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     damageCoolDownTimer->setSingleShot(true);
     connect(damageCoolDownTimer, &QTimer::timeout, this, &Mario::canTakeDamageTruthify);
 
-    // QTimer* pipeCollisionTimer = new QTimer(this);
-    // connect(pipeCollisionTimer, &QTimer::timeout, this, &Mario::isCollidingWithPipes);
-    // pipeCollisionTimer->start(16);
-
-    // QTimer* flagCollisionTimer = new QTimer(this);
-    // connect(flagCollisionTimer, &QTimer::timeout, this, &Mario::checkFlagCollision);
-    // flagCollisionTimer->start(16);
-
-    // QTimer* mushroomTimer = new QTimer(this);
-    // connect(mushroomTimer, &QTimer::timeout, this, &Mario::getMushroom);
-    // mushroomTimer->start(16);
-
-    // QTimer* starTimer = new QTimer(this);
-    // connect(starTimer, &QTimer::timeout, this, &Mario::collide_star);
-    // starTimer->start(16);
-
     allTimer = new QTimer(this);
     connect(allTimer, &QTimer::timeout, this, &Mario::timerFunctions);
     allTimer->start(16);
 
     glowEffect = new QGraphicsColorizeEffect(this);
-    glowEffect->setColor(Qt::yellow); // glowing yellow color
-    glowEffect->setStrength(0.8); // how strong the glow is
+    glowEffect->setColor(Qt::yellow);
+    glowEffect->setStrength(0.8);
 
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
@@ -95,8 +78,7 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
 }
 
 void Mario::timerFunctions() {
-    collide_star();
-    getMushroom();
+    getPowerup();
     checkFlagCollision();
     isCollidingWithPipes();
 }
@@ -124,23 +106,15 @@ void Mario::setFinishFlag(Flag* flag) {
     finishFlag = flag;
 }
 
-void Mario::getMushroom() {
+void Mario::getPowerup() {
     QList<QGraphicsItem*> collisions = collidingItems();
-
     for (QGraphicsItem* collision : collisions) {
         Mushroom* mushroom = dynamic_cast<Mushroom*>(collision);
+        Star* star = dynamic_cast<Star*>(collision);
         if (mushroom) {
             becomeSuper();
             delete mushroom;
-            return;
         }
-    }
-}
-
-void Mario::collide_star() {
-    QList<QGraphicsItem*> collisions = collidingItems();
-    for (QGraphicsItem* collision : collisions) {
-        Star* star = dynamic_cast<Star*>(collision);
         if (star) {
             becomeBase();
             starman();
@@ -152,19 +126,16 @@ void Mario::collide_star() {
 void Mario::starman() {
     playerState = "star";
     be_star = true;
-    glowState = !glowState;  // toggle glow every time called
-
+    glowState = !glowState;
     if (glowState) {
-        this->setGraphicsEffect(glowEffect); // apply glow
+        this->setGraphicsEffect(glowEffect);
     } else {
-        this->setGraphicsEffect(nullptr); // remove glow
+        this->setGraphicsEffect(nullptr);
     }
-
     QTimer::singleShot(5000, this, [this]() {
         be_star = false;
         becomeBase();
-        setGraphicsEffect(nullptr); // ensure glow removed
-
+        setGraphicsEffect(nullptr);
     });
 }
 
@@ -194,9 +165,7 @@ void Mario::updateAnimation() {
             setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
             return;
         }
-
         currentRunFrame = (currentRunFrame + 1) % 3;
-
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
     } else if (playerState == "super") {
         if (!(leftPressed || rightPressed) && onGround) {
@@ -209,12 +178,9 @@ void Mario::updateAnimation() {
             setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Idle_" + horizontalDirection +".png"));
             return;
         }
-
         currentRunFrame = (currentRunFrame + 1) % 3;
-
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
     } else if (playerState == "star") {
-
         if (!(leftPressed || rightPressed) && onGround) {
             setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
             return;
@@ -225,53 +191,44 @@ void Mario::updateAnimation() {
             setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
             return;
         }
-
         currentRunFrame = (currentRunFrame + 1) % 3;
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
     }
 }
 
 bool Mario::isStar()  {
-    return be_star; }
+    return be_star;
+}
 
 void Mario::isCollidingWithPipes()
 {
     canMoveRight = true;
     canMoveLeft = true;
-
     QRectF marioRect = this->sceneBoundingRect();
-
     for (pipe* p : pipeList) {
         QGraphicsPixmapItem* topPart = p->getTopPart();
         QRectF pipeTopRect = topPart->sceneBoundingRect();
-
         QGraphicsPixmapItem* bodyPart = p->getBottomPart();
         QRectF pipeBodyRect = bodyPart->sceneBoundingRect();
-
         bool landingOnTop =
             (marioRect.bottom() >= pipeTopRect.top() - 5) &&
             (marioRect.bottom() <= pipeTopRect.top() + 5) &&
             (marioRect.right() > pipeTopRect.left() + 5) &&
             (marioRect.left() < pipeTopRect.right() - 5) &&
             velocityY >= 0;
-
         if (landingOnTop) {
             setPos(x(), pipeTopRect.top() - marioRect.height());
             onGround = true;
             velocityY = 0;
             continue;
         }
-
         if (marioRect.intersects(pipeTopRect) && marioRect.bottom() > pipeTopRect.top() + 5) {
             handleSideCollision(marioRect, pipeTopRect);
         }
-
         if (marioRect.intersects(pipeBodyRect)) {
             handleSideCollision(marioRect, pipeBodyRect);
         }
-
         preventApproaching(marioRect, pipeTopRect);
-
         preventApproaching(marioRect, pipeBodyRect);
     }
 }
@@ -280,7 +237,6 @@ void Mario::handleSideCollision(const QRectF& marioRect, const QRectF& obstacleR
 {
     double leftOverlap = marioRect.right() - obstacleRect.left();
     double rightOverlap = obstacleRect.right() - marioRect.left();
-
     if (leftOverlap < rightOverlap && leftOverlap > 0) {
         setPos(obstacleRect.left() - marioRect.width(), y());
         canMoveRight = false;
@@ -298,7 +254,6 @@ void Mario::preventApproaching(const QRectF& marioRect, const QRectF& obstacleRe
         if (nextPosRight.intersects(obstacleRect)) {
             canMoveRight = false;
         }
-
         QRectF nextPosLeft = marioRect;
         nextPosLeft.translate(-10, 0);
         if (nextPosLeft.intersects(obstacleRect)) {
@@ -307,33 +262,22 @@ void Mario::preventApproaching(const QRectF& marioRect, const QRectF& obstacleRe
     }
 }
 
-
 void Mario::onFlagSliding(int dy) {
     setY(qMin(y() + dy, 470.0));
 }
 
-
 void Mario::checkFlagCollision() {
     if (winTriggered || !finishFlag)
         return;
-
-
     auto poleSprite = finishFlag->getFlag();
-
     if (collidingItems().contains(poleSprite)) {
         winTriggered = true;
-
         gravityTimer->stop();
         dynamicObstaclesTimer->stop();
         runAnimationTimer->stop();
         stagewinSound->play();
-
-
         finishFlag->startFlagAnimation();
-
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
-
-
         connect(finishFlag, &Flag::animationFinished, this, [](){
             QMessageBox::information(nullptr,
                                      "You Win!",
@@ -360,8 +304,6 @@ void Mario::updatePosition() {
         goombaHitSound->play();
         return;
     }
-
-
     QList<QGraphicsItem*> collisions = collidingItems();
     for (QGraphicsItem* collision : collisions) {
         if (dynamic_cast<Platform*>(collision)) {
@@ -378,7 +320,6 @@ void Mario::updatePosition() {
 
 void Mario::applyPhysics()
 {
-
     if(isMovingRight==isMovingLeft){
         if (velocityX > 0) {
             velocityX -= friction;
@@ -397,24 +338,19 @@ void Mario::applyPhysics()
         else velocityX = 0;
         isFacingRight = false;
     }
-
     if (velocityX > maxSpeed) {
         velocityX = maxSpeed;
     } else if (velocityX < -maxSpeed) {
         velocityX = -maxSpeed;
     }
-
     if (!onGround) {
         velocityY += gravity;
     }
-
-
 }
 
 void Mario::isCollidingWithDynamicObstacles()
 {
     QList<QGraphicsItem*> collisions = collidingItems();
-
     for (QGraphicsItem* collision : collisions) {
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
         KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
@@ -427,9 +363,7 @@ void Mario::isCollidingWithDynamicObstacles()
             } else {
                 double marioBottom = y() + height;
                 double goombaTop = goomba->y();
-
                 if (marioBottom <= goombaTop + goomba->getHeight() / 2 && velocityY >= 0) {
-                    //velocityY = -1.0;
                     jump();
                     jumpSound->play();
                     onGround = false;
@@ -446,23 +380,17 @@ void Mario::isCollidingWithDynamicObstacles()
         } else if (koopa && koopa->getStatus() == "monitor") {
             if (isStar()) {
                 koopa->becomeCrazy();
-                //currentScene->removeItem(koopa);
-                //delete koopa;
                 score += 100;
                 goombaHitSound->play();
                 takeDamage(0);
             } else {
                 double marioBottom = y() + height;
                 double koopaTop = koopa->y();
-
                 if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
                     jump();
                     jumpSound->play();
-                    //velocityY = -1.0;
                     onGround = false;
                     koopa->becomeCrazy();
-                    //currentScene->removeItem(koopa);
-                    //delete koopa;
                     score += 100;
                     goombaHitSound->play();
                     takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
@@ -495,7 +423,6 @@ void Mario::isCollidingWithDynamicObstacles()
     }
 }
 
-
 void Mario::takeDamage(int amount) {
     if(be_star) return;
     if (!canTakeDamage) return;
@@ -510,15 +437,10 @@ void Mario::takeDamage(int amount) {
             currentScene->clear();
             return;
         }
-        //mariodeathSound->play();
         setPos(120,450);
         *center=this->pos();
     }
 }
-
-
-
-
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
@@ -528,12 +450,10 @@ void Mario::keyPressEvent(QKeyEvent *event)
     isCollidingWithPipes();
     switch(event->key()) {
     case Qt::Key_Left:
-        //if(!isJumping) isMovingLeft = true;
         isMovingLeft = true;
         horizontalDirection = "Left";
         break;
     case Qt::Key_Right:
-        //if(!isJumping) isMovingRight = true;
         isMovingRight = true;
         horizontalDirection = "Right";
         break;

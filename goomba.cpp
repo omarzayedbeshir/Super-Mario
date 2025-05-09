@@ -34,7 +34,6 @@ void Goomba::setPlatforms(const QList<Platform*>& platforms) {
     platformList = platforms;
 }
 
-
 void Goomba::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
@@ -60,8 +59,7 @@ void Goomba::applyGravity() {
     }
 }
 
-void Goomba::isCollidingWithPipes()
-{
+void Goomba::isCollidingWithPipes() {
     canMove  = true;
     const qreal eps = 2.0;
 
@@ -81,6 +79,7 @@ void Goomba::isCollidingWithPipes()
         }
     }
 }
+
 void Goomba::move() {
 
     isCollidingWithPipes();
@@ -97,8 +96,6 @@ void Goomba::move() {
             moved = 0;
         }
     }
-
-
 }
 
 int Goomba::getHeight() {

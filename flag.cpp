@@ -4,7 +4,6 @@
 Flag::Flag(qreal x, qreal y, QGraphicsItem* parent)
     : QObject(), QGraphicsItemGroup(parent)
 {
-    // Pole
     poleItem = new QGraphicsPixmapItem(QPixmap(":/graphics/Mario Game Assets/FlagPole.png"));
     poleItem->setScale(2.0);
     poleItem->setPos(x, y);
@@ -40,4 +39,3 @@ void Flag::slideStep() {
         emit animationFinished();
     }
 }
-
