@@ -65,21 +65,25 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     damageCoolDownTimer->setSingleShot(true);
     connect(damageCoolDownTimer, &QTimer::timeout, this, &Mario::canTakeDamageTruthify);
 
-    QTimer* pipeCollisionTimer = new QTimer(this);
-    connect(pipeCollisionTimer, &QTimer::timeout, this, &Mario::isCollidingWithPipes);
-    pipeCollisionTimer->start(16);
+    // QTimer* pipeCollisionTimer = new QTimer(this);
+    // connect(pipeCollisionTimer, &QTimer::timeout, this, &Mario::isCollidingWithPipes);
+    // pipeCollisionTimer->start(16);
 
-    QTimer* flagCollisionTimer = new QTimer(this);
-    connect(flagCollisionTimer, &QTimer::timeout, this, &Mario::checkFlagCollision);
-    flagCollisionTimer->start(16);
+    // QTimer* flagCollisionTimer = new QTimer(this);
+    // connect(flagCollisionTimer, &QTimer::timeout, this, &Mario::checkFlagCollision);
+    // flagCollisionTimer->start(16);
 
-    QTimer* mushroomTimer = new QTimer(this);
-    connect(mushroomTimer, &QTimer::timeout, this, &Mario::getMushroom);
-    mushroomTimer->start(16);
+    // QTimer* mushroomTimer = new QTimer(this);
+    // connect(mushroomTimer, &QTimer::timeout, this, &Mario::getMushroom);
+    // mushroomTimer->start(16);
 
-    QTimer* starTimer = new QTimer(this);
-    connect(starTimer, &QTimer::timeout, this, &Mario::collide_star);
-    starTimer->start(16);
+    // QTimer* starTimer = new QTimer(this);
+    // connect(starTimer, &QTimer::timeout, this, &Mario::collide_star);
+    // starTimer->start(16);
+
+    allTimer = new QTimer(this);
+    connect(allTimer, &QTimer::timeout, this, &Mario::timerFunctions);
+    allTimer->start(16);
 
     glowEffect = new QGraphicsColorizeEffect(this);
     glowEffect->setColor(Qt::yellow); // glowing yellow color
@@ -90,6 +94,12 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     runAnimationTimer->start(100);
 }
 
+void Mario::timerFunctions() {
+    collide_star();
+    getMushroom();
+    checkFlagCollision();
+    isCollidingWithPipes();
+}
 
 int Mario::getHealth() const {
     return health;

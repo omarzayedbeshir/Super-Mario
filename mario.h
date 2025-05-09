@@ -37,7 +37,7 @@ public:
     void collide_star();
     void starman();
 
-
+    void timerFunctions();
 
 
 
@@ -52,7 +52,7 @@ private:
     void updateAnimation();
     void takeDamage(int amount);
     bool isStar();
-
+    QTimer* allTimer;
 
 
     QSoundEffect* jumpSound;
