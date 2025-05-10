@@ -46,18 +46,22 @@ void KoopaTroopa::updatePosition() {
 
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
-            setPos(x(), platform->y() - height);
-            onGround = true;
-            velocityY = 0;
-            break;
+            double koopaBottom = y() + height;
+            double platformTop = platform->y() + platform->boundingRect().height() / 2;
+            if (koopaBottom <= platformTop && velocityY >= 0) {
+                setPos(x(), platform->y() - height);
+                onGround = true;
+                velocityY = 0;
+                break;
+            }
         }
     }
 
     isCollidingWithPipes();
 
     if (status == "monitor") velocityX = 1;
-    else velocityX = 5;
-    if (!canMove || moved >= to_move) {
+    else velocityX = 6;
+    if (!canMove || (moved >= to_move && status == "monitor")) {
         direction *= -1;
         moved = 0;
     }
@@ -73,7 +77,7 @@ void KoopaTroopa::isCollidingWithPipes() {
 
     for (pipe* p : pipeList) {
         QGraphicsPixmapItem* topPart = p->getTopPart();
-        QRectF pipeTopRect = topPart->sceneBoundingRect();
+        QRectF pipeTopRect = p->sceneBoundingRect();
 
         if ( koopaTroopaRect.right() + eps > pipeTopRect.left() && koopaTroopaRect.left() < pipeTopRect.left())
         {

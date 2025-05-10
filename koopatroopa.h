@@ -31,7 +31,7 @@ private:
     QTimer* runAnimationTimer;
     double velocityY = 0;
     double velocityX = 1;
-    double gravity = 0.4;
+    double gravity = 0.8;
     double scale = 2.0;
     int to_move = 200;
     int moved = 0;
