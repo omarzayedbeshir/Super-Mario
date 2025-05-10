@@ -77,7 +77,7 @@ void KoopaTroopa::isCollidingWithPipes() {
 
     for (pipe* p : pipeList) {
         QGraphicsPixmapItem* topPart = p->getTopPart();
-        QRectF pipeTopRect = p->sceneBoundingRect();
+        QRectF pipeTopRect = topPart->sceneBoundingRect();
 
         if ( koopaTroopaRect.right() + eps > pipeTopRect.left() && koopaTroopaRect.left() < pipeTopRect.left())
         {
