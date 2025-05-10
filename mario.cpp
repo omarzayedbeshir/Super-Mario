@@ -170,20 +170,7 @@ void Mario::updateAnimation() {
         }
         currentRunFrame = (currentRunFrame + 1) % 3;
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
-    }/* else if (playerState == "star") {
-        if (!(leftPressed || rightPressed) && onGround) {
-            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
-            return;
-        } else if (!onGround) {
-            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Jump_" + horizontalDirection +".png"));
-            return;
-        } else if (leftPressed && rightPressed) {
-            setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
-            return;
-        }
-        currentRunFrame = (currentRunFrame + 1) % 3;
-        setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
-    }*/
+    }
 }
 
 bool Mario::isStar()  {
