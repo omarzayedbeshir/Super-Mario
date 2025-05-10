@@ -86,7 +86,7 @@ Game::Game(QWidget *parent)
         livesText->setPos(view->mapToScene(10, 40));
         healthText->setPos(view->mapToScene(10, 70));
     });
-    cameraTimer->start(16);
+    cameraTimer->start(1);
 }
 
 Game::~Game()
@@ -145,6 +145,9 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         goomba->setPlatforms(platformsList);
         goomba->setPipes(pipesList);
         scene->addItem(goomba);
+        /*
+        { "x": 450, "y": 3800 }
+        */
     }
 
     for (auto val : root["koopa_troopas"].toArray()) {

@@ -60,7 +60,7 @@ private:
 
     QGraphicsScene* currentScene;
     QList<pipe*> pipeList;
-    QTimer* gravityTimer;
+    QTimer* positionTimer;
     QTimer* dynamicObstaclesTimer;
     QTimer* damageCoolDownTimer;
     QTimer* runAnimationTimer;
@@ -86,7 +86,7 @@ private:
     int health = 100;
     bool canMoveRight;
     bool canMoveLeft;
-    QString playerState = "base"; // base, super, fire
+    QString playerState = "base"; // base = 0, super = 1, fire = 2
     Flag* finishFlag = nullptr;
     bool  winTriggered = false;
     bool isMovingLeft;

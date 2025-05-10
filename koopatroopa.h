@@ -27,10 +27,10 @@ private:
     QList<Platform*> platformList;
     QList<pipe*> pipeList;
     void updateAnimation();
-    QTimer* gravityTimer;
-    QTimer* moveTimer;
+    QTimer* positionTimer;
     QTimer* runAnimationTimer;
     double velocityY = 0;
+    double velocityX = 1;
     double gravity = 0.4;
     double scale = 2.0;
     int to_move = 200;
@@ -42,8 +42,7 @@ private:
     bool canMove;
     int currentRunFrame = 1;
 private slots:
-    void move();
-    void applyGravity();
+    void updatePosition();
 };
 
 #endif // KOOPATROOPA_H

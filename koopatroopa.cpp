@@ -9,14 +9,9 @@ KoopaTroopa::KoopaTroopa(int x, int y) {
     setScale(scale);
     setPos(y, x);
 
-    gravityTimer = new QTimer(this);
-    connect(gravityTimer, &QTimer::timeout, this, &KoopaTroopa::applyGravity);
-
-    moveTimer = new QTimer(this);
-    connect(moveTimer, &QTimer::timeout, this, &KoopaTroopa::move);
-
-    gravityTimer->start(16);
-    moveTimer->start(16);
+    positionTimer = new QTimer(this);
+    connect(positionTimer, &QTimer::timeout, this, &KoopaTroopa::updatePosition);
+    positionTimer->start(16);
 
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &KoopaTroopa::updateAnimation);
@@ -43,25 +38,31 @@ void KoopaTroopa::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
 
-void KoopaTroopa::applyGravity() {
+void KoopaTroopa::updatePosition() {
     velocityY += gravity;
-
-    double dy = velocityY;
-    setPos(x(), y() + dy);
 
     QList<QGraphicsItem*> collisions = collidingItems();
     onGround = false;
 
     for (QGraphicsItem* platform : platformList) {
         if (collisions.contains(platform)) {
-            if (velocityY > 0) {
-                setPos(x(), platform->y() - height);
-                onGround = true;
-                velocityY = 0;
-            }
+            setPos(x(), platform->y() - height);
+            onGround = true;
+            velocityY = 0;
             break;
         }
     }
+
+    isCollidingWithPipes();
+
+    if (status == "monitor") velocityX = 1;
+    else velocityX = 5;
+    if (!canMove || moved >= to_move) {
+        direction *= -1;
+        moved = 0;
+    }
+    setPos(x() + velocityX * direction, y() + velocityY);
+    moved++;
 }
 
 void KoopaTroopa::isCollidingWithPipes() {
@@ -82,27 +83,6 @@ void KoopaTroopa::isCollidingWithPipes() {
         {
             canMove = false;
         }
-    }
-}
-
-void KoopaTroopa::move() {
-
-    isCollidingWithPipes();
-    if (status == "monitor") {
-        if (!canMove) {
-            direction *= -1;
-            moved = 0;
-            setPos(x() + 1 * direction, y());
-        } else {
-            setPos(x() + 1 * direction, y());
-            moved++;
-            if (moved >= to_move) {
-                direction *= -1;
-                moved = 0;
-            }
-        }
-    } else {
-        setPos(x() + 10, y());
     }
 }
 
