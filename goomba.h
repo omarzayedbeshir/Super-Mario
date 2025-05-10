@@ -25,8 +25,7 @@ private:
     QList<Platform*> platformList;
     QList<pipe*> pipeList;
     void updateAnimation();
-    QTimer* gravityTimer;
-    QTimer* moveTimer;
+    QTimer* positionTimer;
     QTimer* runAnimationTimer;
     double velocityY = 0;
     double gravity = 0.4;
@@ -39,8 +38,7 @@ private:
     bool canMove;
     int currentRunFrame = 1;
 private slots:
-    void move();
-    void applyGravity();
+    void updatePosition();
 };
 
 #endif // GOOMBA_H

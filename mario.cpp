@@ -52,13 +52,6 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     setScale(scale);
     setPos(y, x);
     currentScene = scene;
-    gravityTimer = new QTimer(this);
-    connect(gravityTimer, &QTimer::timeout, this, &Mario::updatePosition);
-    gravityTimer->start(16);
-
-    dynamicObstaclesTimer = new QTimer(this);
-    connect(dynamicObstaclesTimer, &QTimer::timeout, this, &Mario::isCollidingWithDynamicObstacles);
-    dynamicObstaclesTimer->start(16);
 
     damageCoolDownTimer = new QTimer(this);
     damageCoolDownTimer->setSingleShot(true);
@@ -78,6 +71,8 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
 }
 
 void Mario::timerFunctions() {
+    updatePosition();
+    isCollidingWithDynamicObstacles();
     getPowerup();
     checkFlagCollision();
     isCollidingWithPipes();
@@ -272,8 +267,7 @@ void Mario::checkFlagCollision() {
     auto poleSprite = finishFlag->getFlag();
     if (collidingItems().contains(poleSprite)) {
         winTriggered = true;
-        gravityTimer->stop();
-        dynamicObstaclesTimer->stop();
+        allTimer->stop();
         runAnimationTimer->stop();
         stagewinSound->play();
         finishFlag->startFlagAnimation();
@@ -364,6 +358,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 double marioBottom = y() + height;
                 double goombaTop = goomba->y();
                 if (marioBottom <= goombaTop + goomba->getHeight() / 2 && velocityY >= 0) {
+                    jumpForce = 7;
                     jump();
                     jumpSound->play();
                     onGround = false;
@@ -387,6 +382,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 double marioBottom = y() + height;
                 double koopaTop = koopa->y();
                 if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                    jumpForce = 7;
                     jump();
                     jumpSound->play();
                     onGround = false;
@@ -408,6 +404,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 double marioBottom = y() + height;
                 double koopaTop = koopa->y();
                 if (marioBottom <= koopaTop + koopa->getHeight() / 2 && velocityY >= 0) {
+                    jumpForce = 7;
                     jump();
                     jumpSound->play();
                     onGround = false;
@@ -429,7 +426,7 @@ void Mario::takeDamage(int amount) {
     canTakeDamage = false;
     health -= amount;
     damageCoolDownTimer->start(1000);
-        if (health <= 0) {
+    if (health <= 0) {
         lives--;
         health = 100;
         if (lives <= 0) {
@@ -460,6 +457,7 @@ void Mario::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Space:
     case Qt::Key_Up:
         if (onGround && !isJumping) {
+            jumpForce = 15;
             jump();
             jumpSound->play();
         }
