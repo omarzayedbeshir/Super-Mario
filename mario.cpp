@@ -61,10 +61,6 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     connect(allTimer, &QTimer::timeout, this, &Mario::timerFunctions);
     allTimer->start(16);
 
-    glowEffect = new QGraphicsColorizeEffect(this);
-    glowEffect->setColor(Qt::yellow);
-    glowEffect->setStrength(0.8);
-
     runAnimationTimer = new QTimer(this);
     connect(runAnimationTimer, &QTimer::timeout, this, &Mario::updateAnimation);
     runAnimationTimer->start(100);
@@ -109,27 +105,24 @@ void Mario::getPowerup() {
         if (mushroom) {
             becomeSuper();
             delete mushroom;
+            return;
         }
         if (star) {
-            becomeBase();
             starman();
             delete star;
-            return;}
+            return;
+        }
     }
 }
 
 void Mario::starman() {
-    playerState = "star";
     be_star = true;
-    glowState = !glowState;
-    if (glowState) {
-        this->setGraphicsEffect(glowEffect);
-    } else {
-        this->setGraphicsEffect(nullptr);
-    }
+    glowEffect = new QGraphicsColorizeEffect(this);
+    glowEffect->setColor(Qt::yellow);
+    glowEffect->setStrength(0.8);
+    this->setGraphicsEffect(glowEffect);
     QTimer::singleShot(5000, this, [this]() {
         be_star = false;
-        becomeBase();
         setGraphicsEffect(nullptr);
     });
 }
@@ -141,6 +134,8 @@ void Mario::becomeSuper() {
 }
 
 void Mario::becomeBase() {
+    be_star = false;
+    setGraphicsEffect(nullptr);
     playerState = "base";
     height = 16 * scale;
     damageToTake = 20;
@@ -175,7 +170,7 @@ void Mario::updateAnimation() {
         }
         currentRunFrame = (currentRunFrame + 1) % 3;
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Big_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
-    } else if (playerState == "star") {
+    }/* else if (playerState == "star") {
         if (!(leftPressed || rightPressed) && onGround) {
             setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_" + horizontalDirection +".png"));
             return;
@@ -188,7 +183,7 @@ void Mario::updateAnimation() {
         }
         currentRunFrame = (currentRunFrame + 1) % 3;
         setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Run" + QString::number(currentRunFrame + 1) + "_" + horizontalDirection +".png"));
-    }
+    }*/
 }
 
 bool Mario::isStar()  {
@@ -293,8 +288,8 @@ void Mario::updatePosition() {
     if(this->pos().x()>center->x()){
         *center=this->pos();
     }
-    if (y() > 700 && !winTriggered && canTakeDamage) {
-        takeDamage(100);
+    if (y() > 700 && !winTriggered) {
+        takeDamage(1000);
         goombaHitSound->play();
         return;
     }
@@ -421,12 +416,13 @@ void Mario::isCollidingWithDynamicObstacles()
 }
 
 void Mario::takeDamage(int amount) {
-    if(be_star) return;
-    if (!canTakeDamage) return;
+    if(isStar() && amount != 1000) return;
+    if (!canTakeDamage && amount != 1000) return;
     canTakeDamage = false;
     health -= amount;
     damageCoolDownTimer->start(1000);
     if (health <= 0) {
+        becomeBase();
         lives--;
         health = 100;
         if (lives <= 0) {
