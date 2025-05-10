@@ -13,6 +13,7 @@
 #include "star.h"
 #include <QMessageBox>
 #include <QGraphicsEffect>
+#include "paratroopa.h"
 
 
 Mario::Mario(int x, int y, QGraphicsScene* scene):
@@ -330,6 +331,8 @@ void Mario::isCollidingWithDynamicObstacles()
     for (QGraphicsItem* collision : collisions) {
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
         KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
+        Paratroopa* para = dynamic_cast<Paratroopa*>(collision);
+
         if (goomba) {
             if (isStar()) {
                 currentScene->removeItem(goomba);
@@ -371,7 +374,7 @@ void Mario::isCollidingWithDynamicObstacles()
                     koopa->becomeCrazy();
                     score += 100;
                     goombaHitSound->play();
-                    takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
+                    takeDamage(0);
                 } else if (canTakeDamage) {
                     takeDamage(damageToTake);
                     becomeBase();
@@ -391,16 +394,39 @@ void Mario::isCollidingWithDynamicObstacles()
                     jumpSound->play();
                     onGround = false;
                     goombaHitSound->play();
-                    takeDamage(0); // DO NOT REMOVE! THIS GIVES THE PLAYER SOME TIME TO ESCAPE!
+                    takeDamage(0);
                 } else if (canTakeDamage) {
                     takeDamage(damageToTake);
                     becomeBase();
                     goombaHitSound->play();
                 }
             }
+        } else if (para) {
+            double marioBottom = y() + height;
+            double paraTop = para->y();
+            if (marioBottom <= paraTop + para->getHeight() / 2 && velocityY >= 0) {
+                jumpForce = 7;
+                jump();
+                jumpSound->play();
+                onGround = false;
+                goombaHitSound->play();
+                para->turnIntoKoopa();
+                score += 100;
+            } else if (canTakeDamage) {
+                if (!isStar()) {
+                    takeDamage(20);
+                    becomeBase();
+                    goombaHitSound->play();
+                } else {
+                    para->turnIntoKoopa();
+                    score += 100;
+                    goombaHitSound->play();
+                }
+            }
         }
     }
 }
+
 
 void Mario::takeDamage(int amount) {
     if(isStar() && amount != 1000) return;

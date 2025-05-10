@@ -18,6 +18,7 @@
 #include <QJsonArray>
 #include "star.h"
 #include <QElapsedTimer>
+#include "paratroopa.h"
 
 
 Game::Game(QWidget *parent)
@@ -157,6 +158,15 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         koopa->setPipes(pipesList);
         scene->addItem(koopa);
     }
+
+    for (auto val : root["paratroopas"].toArray()) {
+        auto obj = val.toObject();
+        Paratroopa* paratroopa = new Paratroopa(obj["x"].toInt(), obj["y"].toInt());
+        paratroopa->setPlatforms(platformsList);
+        paratroopa->setPipes(pipesList);
+        scene->addItem(paratroopa);
+    }
+
 
     if (root.contains("flag")) {
         auto obj = root["flag"].toObject();

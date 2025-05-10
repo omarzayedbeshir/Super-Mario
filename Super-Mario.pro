@@ -16,6 +16,7 @@ SOURCES += \
     game.cpp \
     mario.cpp \
     mushroom.cpp \
+    paratroopa.cpp \
     pipe.cpp \
     platform.cpp \
     star.cpp
@@ -27,6 +28,7 @@ HEADERS += \
     koopatroopa.h \
     mario.h \
     mushroom.h \
+    paratroopa.h \
     pipe.h \
     platform.h \
     star.h

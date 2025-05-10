@@ -69,5 +69,9 @@
         <file>Mario Game Assets/Mario_Big_Run3_Right.png</file>
         <file>Mario Game Assets/levels/level1.json</file>
         <file>Mario Game Assets/levels/level2.json</file>
+        <file>Mario Game Assets/Paratroopa_1_Left.png</file>
+        <file>Mario Game Assets/Paratroopa_1_Right.png</file>
+        <file>Mario Game Assets/Paratroopa_2_Left.png</file>
+        <file>Mario Game Assets/Paratroopa_2_Right.png</file>
     </qresource>
 </RCC>
