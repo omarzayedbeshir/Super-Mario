@@ -131,6 +131,7 @@ void Mario::starman() {
 void Mario::becomeSuper() {
     playerState = "super";
     height = 32 * scale;
+    setPos(x(), y() - height/2);
     damageToTake = 0;
 }
 
@@ -189,10 +190,10 @@ void Mario::isCollidingWithPipes()
         QGraphicsPixmapItem* bodyPart = p->getBottomPart();
         QRectF pipeBodyRect = bodyPart->sceneBoundingRect();
         bool landingOnTop =
-            (marioRect.bottom() >= pipeTopRect.top() - 5) &&
-            (marioRect.bottom() <= pipeTopRect.top() + 5) &&
-            (marioRect.right() > pipeTopRect.left() + 5) &&
-            (marioRect.left() < pipeTopRect.right() - 5) &&
+            (marioRect.bottom() >= pipeTopRect.top() - 15) &&
+            (marioRect.bottom() <= pipeTopRect.top() + 15) &&
+            (marioRect.right() > pipeTopRect.left() + 15) &&
+            (marioRect.left() < pipeTopRect.right() - 15) &&
             velocityY >= 0;
         if (landingOnTop) {
             setPos(x(), pipeTopRect.top() - marioRect.height());
