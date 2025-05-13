@@ -25,7 +25,7 @@ Game::Game(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Game)
 {
-    current_level = 1;
+    current_level = 4;
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 6000, 600);
@@ -44,8 +44,16 @@ Game::Game(QWidget *parent)
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Setting up Mario
-    Mario *mario = renderLevel(current_level, scene);
+    QPair<Mario*, QString> pair = renderLevel(current_level, scene);
+    funnyText = new QGraphicsTextItem();
+    funnyText->setPlainText(pair.second);
+    funnyText->setDefaultTextColor(Qt::white);
+    funnyText->setFont(QFont("Arial", 16));
+    scene->addItem(funnyText);
 
+    funnyText->setPos(100, 300);
+
+    Mario *mario = pair.first;
     // Setting up statistics
     QGraphicsTextItem* scoreText = new QGraphicsTextItem();
     scoreText->setPlainText("Score: 0");
@@ -90,12 +98,16 @@ Game::Game(QWidget *parent)
     cameraTimer->start(1);
 }
 
+void Game::setFunnyText(QString funnyTextString) {
+    funnyText->setPlainText(funnyTextString);
+}
+
 Game::~Game()
 {
     delete ui;
 }
 
-Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
+QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
     qDeleteAll(platformsList);
     qDeleteAll(pipesList);
     pipesList.clear();
@@ -105,7 +117,8 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
     QFile file(":/graphics/Mario Game Assets/levels/level" + QString::number(levelNumber) + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open level file";
-        return nullptr;
+        QPair<Mario*, QString> pair(nullptr, "");
+        return pair;
     }
 
     scene->clear();
@@ -193,5 +206,11 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         scene->addItem(boss);
     }
 
-    return mario;
+    if (root.contains("funny_text")) {
+        QPair<Mario*, QString> pair(mario, root["funny_text"].toString());
+        return pair;
+    } else {
+        QPair<Mario*, QString> pair(mario, "");
+        return pair;
+    }
 }

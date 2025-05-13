@@ -35,6 +35,7 @@
         { "x": 450, "y": 1600 },
         { "x": 450, "y": 1870 }
     ],
+    "funny_text": "Let's face it, you only passed the previous level by luck...",
     "koopa_troopas": [
       { "x": 450, "y": 2200 },
       { "x": 450, "y": 3150 },

@@ -8,6 +8,7 @@
 #include "platform.h"
 #include "pipe.h"
 #include "flag.h"
+#include <QPair>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,8 +27,8 @@ public:
     void loadPlayerPosition(const QJsonObject &levelData);
     void loadPlatforms(const QJsonArray &platforms);
     void loadEnemies(const QJsonArray &enemies);
-    Mario* renderLevel(int levelNumber, QGraphicsScene* scene);
-
+    QPair<Mario*, QString> renderLevel(int levelNumber, QGraphicsScene* scene);
+    void setFunnyText(QString funnyTextString);
 private:
     Ui::Game *ui;
     int current_level;
@@ -37,5 +38,6 @@ private:
     QList<Platform*> platformsList;
     QList<pipe*> pipesList;
     Flag* finishFlag;
+    QGraphicsTextItem* funnyText;
 };
 #endif // GAME_H
