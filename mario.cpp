@@ -15,6 +15,7 @@
 #include <QGraphicsEffect>
 #include "boss.h"
 #include "paratroopa.h"
+#include "coin.h"
 
 
 Mario::Mario(int x, int y, QGraphicsScene* scene):
@@ -53,7 +54,7 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
 
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
-    setPos(y, x);
+    setPos(x, y);
     currentScene = scene;
 
     damageCoolDownTimer = new QTimer(this);
@@ -105,6 +106,7 @@ void Mario::getPowerup() {
     for (QGraphicsItem* collision : collisions) {
         Mushroom* mushroom = dynamic_cast<Mushroom*>(collision);
         Star* star = dynamic_cast<Star*>(collision);
+        Coin* coin = dynamic_cast<Coin*>(collision);
         if (mushroom) {
             becomeSuper();
             delete mushroom;
@@ -113,6 +115,13 @@ void Mario::getPowerup() {
         if (star) {
             starman();
             delete star;
+            return;
+        }
+        if (coin) {
+            currentScene->removeItem(coin);
+            delete coin;
+            score += 100;
+            goombaHitSound->play();
             return;
         }
     }

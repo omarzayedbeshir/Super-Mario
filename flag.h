@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QGraphicsItemGroup>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsPixmapItem>
 #include <QTimer>
 
 

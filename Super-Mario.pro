@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     boss.cpp \
+    coin.cpp \
     flag.cpp \
     goomba.cpp \
     koopatroopa.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     boss.h \
+    coin.h \
     flag.h \
     game.h \
     goomba.h \

@@ -20,12 +20,13 @@
 #include <QElapsedTimer>
 #include "paratroopa.h"
 #include "boss.h"
+#include "coin.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Game)
 {
-    current_level = 4;
+    current_level = 1;
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 6000, 600);
@@ -38,6 +39,7 @@ Game::Game(QWidget *parent)
     view->setScene(scene);
     view->setFixedSize(800, 600);
     setCentralWidget(view);
+    setWindowTitle("Super Mario");
 
     view->setScene(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -141,6 +143,12 @@ QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene)
         pipesList.append(p);
     }
 
+    for (auto val : root["coins"].toArray()) {
+        auto obj = val.toObject();
+        Coin* coin = new Coin(obj["x"].toInt(), obj["y"].toInt());
+        scene->addItem(coin);
+    }
+
     for (auto val : root["mushrooms"].toArray()) {
         auto obj = val.toObject();
         Mushroom* mushroom = new Mushroom(obj["x"].toInt(), obj["y"].toInt());
@@ -159,9 +167,6 @@ QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene)
         goomba->setPlatforms(platformsList);
         goomba->setPipes(pipesList);
         scene->addItem(goomba);
-        /*
-        { "x": 450, "y": 3800 }
-        */
     }
 
     for (auto val : root["koopa_troopas"].toArray()) {
