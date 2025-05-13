@@ -131,7 +131,7 @@ void Mario::starman() {
 void Mario::becomeSuper() {
     playerState = "super";
     height = 32 * scale;
-    setPos(x(), y() - height/2);
+    setPos(x(), y() - height);
     damageToTake = 0;
 }
 
