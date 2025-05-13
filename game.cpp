@@ -19,7 +19,7 @@
 #include "star.h"
 #include <QElapsedTimer>
 #include "paratroopa.h"
-
+#include "boss.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)

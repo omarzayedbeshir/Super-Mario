@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    boss.cpp \
     flag.cpp \
     goomba.cpp \
     koopatroopa.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
     star.cpp
 
 HEADERS += \
+    boss.h \
     flag.h \
     game.h \
     goomba.h \

@@ -13,6 +13,7 @@
 #include "star.h"
 #include <QMessageBox>
 #include <QGraphicsEffect>
+#include "boss.h"
 #include "paratroopa.h"
 
 
@@ -333,7 +334,7 @@ void Mario::isCollidingWithDynamicObstacles()
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
         KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
         Paratroopa* para = dynamic_cast<Paratroopa*>(collision);
-
+        Boss* boss = dynamic_cast<Boss*>(collision);
         if (goomba) {
             if (isStar()) {
                 currentScene->removeItem(goomba);
@@ -423,6 +424,11 @@ void Mario::isCollidingWithDynamicObstacles()
                     score += 100;
                     goombaHitSound->play();
                 }
+            }
+        } else if (boss) {
+            if (!isStar()) {
+                takeDamage(100);
+                boss->reposition();
             }
         }
     }

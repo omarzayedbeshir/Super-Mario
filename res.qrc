@@ -73,5 +73,7 @@
         <file>Mario Game Assets/Paratroopa_1_Right.png</file>
         <file>Mario Game Assets/Paratroopa_2_Left.png</file>
         <file>Mario Game Assets/Paratroopa_2_Right.png</file>
+        <file>Mario Game Assets/Bowser2.png</file>
+        <file>Mario Game Assets/Bowser1.png</file>
     </qresource>
 </RCC>
