@@ -187,5 +187,11 @@ Mario* Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
         scene->addItem(mario);
     }
 
+    if (root.contains("boss")) {
+        auto obj = root["boss"].toObject();
+        Boss* boss = new Boss(obj["x"].toInt(), obj["y"].toInt(), scene);
+        scene->addItem(boss);
+    }
+
     return mario;
 }

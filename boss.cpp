@@ -7,7 +7,7 @@
 Boss::Boss(int x, int y, QGraphicsScene* sceneInput) {
     setPixmap(QPixmap(":graphics/Mario Game Assets/Bowser1.png"));
     setScale(scale);
-    setPos(y, x);
+    setPos(x, y);
     initX = x;
     initY = y;
     scene = sceneInput;
@@ -39,7 +39,7 @@ void Boss::updatePosition() {
         }
     }
 
-    setPos(x() + 3, y() + velocityY);
+    setPos(x() + 4, y() + velocityY);
 }
 
 

@@ -75,5 +75,8 @@
         <file>Mario Game Assets/Paratroopa_2_Right.png</file>
         <file>Mario Game Assets/Bowser2.png</file>
         <file>Mario Game Assets/Bowser1.png</file>
+        <file>Mario Game Assets/levels/level3.json</file>
+        <file>Mario Game Assets/levels/level4.json</file>
+        <file>Mario Game Assets/levels/level5.json</file>
     </qresource>
 </RCC>

@@ -33,7 +33,8 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
 {
     center=new QPointF;
     *center=this->pos();
-
+    initX = x;
+    initY = y;
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
     jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
@@ -427,7 +428,7 @@ void Mario::isCollidingWithDynamicObstacles()
             }
         } else if (boss) {
             if (!isStar()) {
-                takeDamage(100);
+                takeDamage(10000);
                 boss->reposition();
             }
         }
@@ -450,7 +451,7 @@ void Mario::takeDamage(int amount) {
             currentScene->clear();
             return;
         }
-        setPos(120,450);
+        setPos(initX, initY);
         *center=this->pos();
     }
 }

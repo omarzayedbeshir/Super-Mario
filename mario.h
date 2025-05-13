@@ -51,7 +51,8 @@ private:
     void takeDamage(int amount);
     bool isStar();
     QTimer* allTimer;
-
+    int initX;
+    int initY;
 
     QSoundEffect* jumpSound;
     QSoundEffect* goombaHitSound;
