@@ -1,4 +1,5 @@
 #include "mario.h"
+#include "piranha.h"
 #include "platform.h"
 #include <QTimer>
 #include <QBrush>
@@ -378,6 +379,7 @@ void Mario::isCollidingWithDynamicObstacles()
         Goomba* goomba = dynamic_cast<Goomba*>(collision);
         KoopaTroopa* koopa = dynamic_cast<KoopaTroopa*>(collision);
         Paratroopa* para = dynamic_cast<Paratroopa*>(collision);
+        Piranha* piranha = dynamic_cast<Piranha*>(collision);
         Boss* boss = dynamic_cast<Boss*>(collision);
         if (goomba) {
             if (isStar()) {
@@ -469,6 +471,19 @@ void Mario::isCollidingWithDynamicObstacles()
                     goombaHitSound->play();
                 }
             }
+        }  else if (piranha) {
+            if (piranha->y() < piranha->getdownY()) {
+                if (!isStar() && canTakeDamage) {
+                    takeDamage(20);
+                    goombaHitSound->play();
+                }
+                else if (isStar()) {
+                    currentScene->removeItem(piranha);
+                    delete piranha;
+                    score += 100;
+                }
+            }
+
         } else if (boss) {
             if (!isStar()) {
                 takeDamage(10000);

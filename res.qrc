@@ -78,5 +78,7 @@
         <file>Mario Game Assets/levels/level3.json</file>
         <file>Mario Game Assets/levels/level4.json</file>
         <file>Mario Game Assets/levels/level5.json</file>
+        <file>Mario Game Assets/Piranha_1.png</file>
+        <file>Mario Game Assets/Piranha_2.png</file>
     </qresource>
 </RCC>

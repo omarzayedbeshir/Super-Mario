@@ -1,4 +1,5 @@
 #include "game.h"
+#include "piranha.h"
 #include "ui_game.h"
 #include <QGraphicsScene>
 #include "platform.h"
@@ -117,6 +118,17 @@ void Game::renderLevel(int levelNumber) {
         scene->addItem(p);
         pipesList.append(p);
     }
+
+    for (auto val : root["piranhas"].toArray()) {
+        auto obj = val.toObject();
+        pipe* homePipe = nullptr;
+        for (pipe* p : pipesList) {
+                homePipe = p;
+            }
+        Piranha* piranha = new Piranha(obj["x"].toInt(), obj["y"].toInt(), homePipe);
+        scene->addItem(piranha);
+    }
+
 
     for (auto val : root["coins"].toArray()) {
         auto obj = val.toObject();

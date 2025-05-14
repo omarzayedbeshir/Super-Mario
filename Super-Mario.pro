@@ -20,6 +20,7 @@ SOURCES += \
     mushroom.cpp \
     paratroopa.cpp \
     pipe.cpp \
+    piranha.cpp \
     platform.cpp \
     star.cpp
 
@@ -34,6 +35,7 @@ HEADERS += \
     mushroom.h \
     paratroopa.h \
     pipe.h \
+    piranha.h \
     platform.h \
     star.h
 
