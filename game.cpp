@@ -52,11 +52,16 @@ Game::Game(QWidget *parent)
     healthText->setDefaultTextColor(Qt::white);
     healthText->setFont(QFont("Arial", 16));
 
+    levelText = new QGraphicsTextItem();
+    levelText->setDefaultTextColor(Qt::white);
+    levelText->setFont(QFont("Arial", 16));
+
     QTimer* cameraTimer = new QTimer();
     connect(cameraTimer, &QTimer::timeout, this, [this]() {
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
         scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
         healthText->setPlainText("Health: " + QString::number(mario->getHealth()));
+        levelText->setPlainText("Level: " + QString::number(mario->getLevel()));
         if(mario->pos().x() == 0){
             renderLevel(mario->getLevel());
         }
@@ -67,6 +72,7 @@ Game::Game(QWidget *parent)
         scoreText->setPos(view->mapToScene(10, 10));
         livesText->setPos(view->mapToScene(10, 40));
         healthText->setPos(view->mapToScene(10, 70));
+        levelText->setPos(view->mapToScene(10, 100));
     });
     cameraTimer->start(1);
 }
@@ -94,6 +100,9 @@ void Game::renderLevel(int levelNumber) {
 
     scene->addItem(healthText);
     healthText->setPos(10, 70);
+
+    scene->addItem(levelText);
+    healthText->setPos(10, 100);
 
     QFile file(":/graphics/Mario Game Assets/levels/level" + QString::number(levelNumber) + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -156,20 +165,20 @@ void Game::renderLevel(int levelNumber) {
         scene->addItem(goomba);
     }
 
-    for (auto val : root["koopa_troopas"].toArray()) {
-        auto obj = val.toObject();
-        KoopaTroopa* koopa = new KoopaTroopa(obj["x"].toInt(), obj["y"].toInt());
-        koopa->setPlatforms(platformsList);
-        koopa->setPipes(pipesList);
-        scene->addItem(koopa);
-    }
-
     for (auto val : root["paratroopas"].toArray()) {
         auto obj = val.toObject();
         Paratroopa* paratroopa = new Paratroopa(obj["x"].toInt(), obj["y"].toInt());
         paratroopa->setPlatforms(platformsList);
         paratroopa->setPipes(pipesList);
         scene->addItem(paratroopa);
+    }
+
+    for (auto val : root["koopa_troopas"].toArray()) {
+        auto obj = val.toObject();
+        KoopaTroopa* koopa = new KoopaTroopa(obj["x"].toInt(), obj["y"].toInt());
+        koopa->setPlatforms(platformsList);
+        koopa->setPipes(pipesList);
+        scene->addItem(koopa);
     }
 
     if (root.contains("flag")) {
@@ -186,8 +195,10 @@ void Game::renderLevel(int levelNumber) {
         mario->setPipes(pipesList);
         mario->setFinishFlag(finishFlag);
         mario->setFlag(QGraphicsItem::ItemIsFocusable);
-        if(levelNumber == 1) mario->setScore(0);
-        mario->setHealth(100);
+        if(levelNumber == 1){
+            mario->setScore(0);
+            mario->setHealth(100);
+        }
         scene->addItem(mario);
         mario->setFocus();
         *center=mario->pos();

@@ -37,6 +37,7 @@ private:
     QGraphicsTextItem* scoreText;
     QGraphicsTextItem* livesText;
     QGraphicsTextItem* healthText;
+    QGraphicsTextItem* levelText;
     QGraphicsTextItem* funnyText;
 };
 #endif // GAME_H
