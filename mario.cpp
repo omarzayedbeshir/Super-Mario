@@ -166,6 +166,7 @@ void Mario::becomeSuper() {
     playerState = "super";
     height = 32 * scale;
     setPos(x(), y());
+    jumpForce = 7;
     jump();
     damageToTake = 0;
 }
@@ -292,8 +293,8 @@ void Mario::checkFlagCollision() {
         finishFlag->startFlagAnimation();
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
         connect(finishFlag, &Flag::animationFinished, this, [this](){
-            QMessageBox::information(nullptr, "Level Complete", "You've passed this level!");
             if(level<5){
+                QMessageBox::information(nullptr, "Level Complete", "You've passed this level!");
                 level++;
                 setPos(0, 0);
                 *center=this->pos();
@@ -307,9 +308,6 @@ void Mario::checkFlagCollision() {
                                          "Congratulations! You won the game! Click this button to exit!");
                 QApplication::quit();
             }
-            /*if (!stagewinSound->isPlaying()) {
-                stagewinSound, &QSoundEffect::playingChanged //Changing Level after sound effect
-            }*/
         });
     }
 }

@@ -40,6 +40,9 @@ Game::Game(QWidget *parent)
 
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 800, 600);
+    QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
+    backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    scene->setBackgroundBrush(backgroundImage);
     QGraphicsTextItem* title = new QGraphicsTextItem("Super Mario");
     title->setDefaultTextColor(Qt::white);
     title->setFont(QFont("Arial", 36, QFont::Bold));
@@ -49,7 +52,7 @@ Game::Game(QWidget *parent)
     QPushButton* startButton = new QPushButton("Start Game");
     startButton->setFixedSize(200, 50);
     startButton->move(300, 300);
-    startButton->setStyleSheet("background-color: red; color: white; font-size: 18px;");
+    startButton->setStyleSheet("background-color: green; color: white; font-size: 18px;");
 
     // Add button to the view
     view->setScene(scene);
@@ -58,7 +61,6 @@ Game::Game(QWidget *parent)
     // Connect button to start the game
     connect(startButton, &QPushButton::clicked, this, [=]() {
         UISetup();
-        renderLevel(1);
     });
 }
 
