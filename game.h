@@ -24,6 +24,7 @@ public:
     Game(QWidget *parent = nullptr);
     ~Game();
     void renderLevel(int levelNumber);
+    void UISetup();
 private:
     Ui::Game *ui;
     int current_level;

@@ -10,6 +10,7 @@
 #include "goomba.h"
 #include "mushroom.h"
 #include "koopatroopa.h"
+#include <QPushButton>
 #include "pipe.h"
 #include <QPixmap>
 #include "flag.h"
@@ -37,6 +38,31 @@ Game::Game(QWidget *parent)
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    scene = new QGraphicsScene(this);
+    scene->setSceneRect(0, 0, 800, 600);
+    QGraphicsTextItem* title = new QGraphicsTextItem("Super Mario");
+    title->setDefaultTextColor(Qt::white);
+    title->setFont(QFont("Arial", 36, QFont::Bold));
+    title->setPos(250, 100);
+    scene->addItem(title);
+
+    QPushButton* startButton = new QPushButton("Start Game");
+    startButton->setFixedSize(200, 50);
+    startButton->move(300, 300);
+    startButton->setStyleSheet("background-color: red; color: white; font-size: 18px;");
+
+    // Add button to the view
+    view->setScene(scene);
+    view->scene()->addWidget(startButton);
+
+    // Connect button to start the game
+    connect(startButton, &QPushButton::clicked, this, [=]() {
+        UISetup();
+        renderLevel(1);
+    });
+}
+
+void Game::UISetup() {
     mario = new Mario;
     center = new QPointF;
 
