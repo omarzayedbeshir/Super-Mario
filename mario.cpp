@@ -304,7 +304,7 @@ void Mario::checkFlagCollision() {
             else{
                 QMessageBox::information(nullptr,
                                          "You Win!",
-                                         "Congratulations! You won the game!");
+                                         "Congratulations! You won the game! Click this button to exit!");
                 QApplication::quit();
             }
             /*if (!stagewinSound->isPlaying()) {
