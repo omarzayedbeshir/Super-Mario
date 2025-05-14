@@ -26,70 +26,40 @@ Game::Game(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Game)
 {
-    current_level = 1;
     ui->setupUi(this);
-    scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 6000, 600);
-    QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
-    backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    scene->setBackgroundBrush(backgroundImage);
     setFixedSize(800, 600);
 
     view = new QGraphicsView(this);
-    view->setScene(scene);
     view->setFixedSize(800, 600);
     setCentralWidget(view);
     setWindowTitle("Super Mario");
-
-    view->setScene(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Setting up Mario
-    QPair<Mario*, QString> pair = renderLevel(current_level, scene);
-    funnyText = new QGraphicsTextItem();
-    funnyText->setPlainText(pair.second);
-    funnyText->setDefaultTextColor(Qt::white);
-    funnyText->setFont(QFont("Arial", 16));
-    scene->addItem(funnyText);
+    mario = new Mario;
+    center = new QPointF;
 
-    funnyText->setPos(100, 300);
-
-    Mario *mario = pair.first;
-    // Setting up statistics
-    QGraphicsTextItem* scoreText = new QGraphicsTextItem();
-    scoreText->setPlainText("Score: 0");
+    scoreText = new QGraphicsTextItem();
     scoreText->setDefaultTextColor(Qt::white);
     scoreText->setFont(QFont("Arial", 16));
-    scene->addItem(scoreText);
 
-    scoreText->setPos(10, 10);
-
-    QGraphicsTextItem* livesText = new QGraphicsTextItem();
-    livesText->setPlainText("Lives: 10");
+    livesText = new QGraphicsTextItem();
     livesText->setDefaultTextColor(Qt::white);
     livesText->setFont(QFont("Arial", 16));
-    scene->addItem(livesText);
 
-    livesText->setPos(10, 40);
-
-    QGraphicsTextItem* healthText = new QGraphicsTextItem();
-    healthText->setPlainText("Heath: 100");
+    healthText = new QGraphicsTextItem();
     healthText->setDefaultTextColor(Qt::white);
     healthText->setFont(QFont("Arial", 16));
-    scene->addItem(healthText);
-
-    healthText->setPos(10, 70);
-
-    center = new QPointF;
-    *center=mario->pos();
 
     QTimer* cameraTimer = new QTimer();
-    connect(cameraTimer, &QTimer::timeout, this, [this, mario, scoreText, livesText, healthText]() {
+    connect(cameraTimer, &QTimer::timeout, this, [this]() {
         livesText->setPlainText("Lives: " + QString::number(mario->getLives()));
         scoreText->setPlainText("Score: " + QString::number(mario->getScore()));
-        healthText->setPlainText("Heath: " + QString::number(mario->getHealth()));
-        if(mario->pos().x()>center->x() || mario->pos().x() == 120){
+        healthText->setPlainText("Health: " + QString::number(mario->getHealth()));
+        if(mario->pos().x() == 0){
+            renderLevel(mario->getLevel());
+        }
+        if(mario->pos().x()>center->x()){
             *center=mario->pos();
         }
         view->centerOn(*center);
@@ -100,30 +70,35 @@ Game::Game(QWidget *parent)
     cameraTimer->start(1);
 }
 
-void Game::setFunnyText(QString funnyTextString) {
-    funnyText->setPlainText(funnyTextString);
-}
-
 Game::~Game()
 {
     delete ui;
 }
 
-QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene) {
-    qDeleteAll(platformsList);
-    qDeleteAll(pipesList);
-    pipesList.clear();
+void Game::renderLevel(int levelNumber) {
     platformsList.clear();
     pipesList.clear();
+    scene = new QGraphicsScene(this);
+    scene->setSceneRect(0, 0, 6000, 600);
+    QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
+    backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    scene->setBackgroundBrush(backgroundImage);
+    view->setScene(scene);
+
+    scene->addItem(scoreText);
+    scoreText->setPos(10, 10);
+
+    scene->addItem(livesText);
+    livesText->setPos(10, 40);
+
+    scene->addItem(healthText);
+    healthText->setPos(10, 70);
 
     QFile file(":/graphics/Mario Game Assets/levels/level" + QString::number(levelNumber) + ".json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open level file";
-        QPair<Mario*, QString> pair(nullptr, "");
-        return pair;
     }
 
-    scene->clear();
     QByteArray data = file.readAll();
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject root = doc.object();
@@ -185,7 +160,6 @@ QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene)
         scene->addItem(paratroopa);
     }
 
-
     if (root.contains("flag")) {
         auto obj = root["flag"].toObject();
         Flag* flag = new Flag(obj["x"].toInt(), obj["y"].toInt());
@@ -193,16 +167,18 @@ QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene)
         finishFlag = flag;
     }
 
-    Mario* mario;
-
     if (root.contains("mario")) {
         auto obj = root["mario"].toObject();
-        mario = new Mario(obj["x"].toInt(), obj["y"].toInt(), scene);
+        mario->setScene(scene);
+        mario->setInit(obj["x"].toInt(), obj["y"].toInt());
         mario->setPipes(pipesList);
         mario->setFinishFlag(finishFlag);
         mario->setFlag(QGraphicsItem::ItemIsFocusable);
-        mario->setFocus();
+        if(levelNumber == 1) mario->setScore(0);
+        mario->setHealth(100);
         scene->addItem(mario);
+        mario->setFocus();
+        *center=mario->pos();
     }
 
     if (root.contains("boss")) {
@@ -212,10 +188,11 @@ QPair<Mario*, QString> Game::renderLevel(int levelNumber, QGraphicsScene* scene)
     }
 
     if (root.contains("funny_text")) {
-        QPair<Mario*, QString> pair(mario, root["funny_text"].toString());
-        return pair;
-    } else {
-        QPair<Mario*, QString> pair(mario, "");
-        return pair;
+        QGraphicsTextItem *funnyText = new QGraphicsTextItem();
+        funnyText->setPlainText(root["funny_text"].toString());
+        funnyText->setDefaultTextColor(Qt::white);
+        funnyText->setFont(QFont("Arial", 16));
+        scene->addItem(funnyText);
+        funnyText->setPos(100, 300);
     }
 }

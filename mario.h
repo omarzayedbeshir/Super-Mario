@@ -22,13 +22,18 @@ class Mario : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Mario(int x, int y, QGraphicsScene* scene);
-    int getLives();
-    int getScore();
+    Mario();
+    int getLevel() const;
+    int getLives() const;
+    int getScore() const;
     int getHealth() const;
-
+    void setLives(int Lives);
+    void setScore(int Score);
+    void setHealth(int Health);
     void becomeBase();
     void becomeSuper();
+    void setScene(QGraphicsScene *scene);
+    void setInit(int x, int y);
     void setPipes(const QList<pipe*>& pipes);
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);
@@ -85,6 +90,7 @@ private:
     bool be_star = false;
     int lives = 5;
     int health = 100;
+    int level;
     bool canMoveRight;
     bool canMoveLeft;
     QString playerState = "base"; // base = 0, super = 1, fire = 2

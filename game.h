@@ -23,21 +23,20 @@ class Game : public QMainWindow
 public:
     Game(QWidget *parent = nullptr);
     ~Game();
-    void loadLevel(int levelNumber);
-    void loadPlayerPosition(const QJsonObject &levelData);
-    void loadPlatforms(const QJsonArray &platforms);
-    void loadEnemies(const QJsonArray &enemies);
-    QPair<Mario*, QString> renderLevel(int levelNumber, QGraphicsScene* scene);
-    void setFunnyText(QString funnyTextString);
+    void renderLevel(int levelNumber);
 private:
     Ui::Game *ui;
     int current_level;
     QGraphicsScene *scene;
     QGraphicsView *view;
+    Mario* mario;
     QPointF *center;
     QList<Platform*> platformsList;
     QList<pipe*> pipesList;
     Flag* finishFlag;
+    QGraphicsTextItem* scoreText;
+    QGraphicsTextItem* livesText;
+    QGraphicsTextItem* healthText;
     QGraphicsTextItem* funnyText;
 };
 #endif // GAME_H

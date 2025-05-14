@@ -18,7 +18,7 @@
 #include "coin.h"
 
 
-Mario::Mario(int x, int y, QGraphicsScene* scene):
+Mario::Mario():
     velocityX(0),
     velocityY(0),
     gravity(0.8),
@@ -32,10 +32,9 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     isFacingRight(true),
     onGround(false)
 {
+    level = 1;
     center=new QPointF;
     *center=this->pos();
-    initX = x;
-    initY = y;
     jumpSound = new QSoundEffect(this);
     jumpSound->setVolume(1);
     jumpSound->setSource(QUrl("qrc:/graphics/Mario Game Assets/smb_jump-small.wav"));
@@ -54,8 +53,6 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
 
     setPixmap(QPixmap(":graphics/Mario Game Assets/Mario_Small_Idle_Right.png"));
     setScale(scale);
-    setPos(x, y);
-    currentScene = scene;
 
     damageCoolDownTimer = new QTimer(this);
     damageCoolDownTimer->setSingleShot(true);
@@ -70,12 +67,36 @@ Mario::Mario(int x, int y, QGraphicsScene* scene):
     runAnimationTimer->start(100);
 }
 
+void Mario::setScene(QGraphicsScene *scene){
+    currentScene = scene;
+}
+
+void Mario::setInit(int x, int y){
+    initX = x;
+    initY = y;
+    setPos(x, y);
+}
+
 void Mario::timerFunctions() {
     updatePosition();
     isCollidingWithDynamicObstacles();
     getPowerup();
     checkFlagCollision();
     isCollidingWithPipes();
+}
+
+void Mario::setLives(int Lives){
+    lives = Lives;
+}
+void Mario::setScore(int Score){
+    score = Score;
+}
+void Mario::setHealth(int Health){
+    health = Health;
+}
+
+int Mario::getLevel() const{
+    return level;
 }
 
 int Mario::getHealth() const {
@@ -86,11 +107,11 @@ void Mario::canTakeDamageTruthify() {
     canTakeDamage = true;
 }
 
-int Mario::getLives() {
+int Mario::getLives() const{
     return lives;
 }
 
-int Mario::getScore() {
+int Mario::getScore() const{
     return score;
 }
 
@@ -267,10 +288,23 @@ void Mario::checkFlagCollision() {
         stagewinSound->play();
         finishFlag->startFlagAnimation();
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
-        connect(finishFlag, &Flag::animationFinished, this, [](){
-            QMessageBox::information(nullptr,
-                                     "You Win!",
-                                     "Congratulations! You reached the flag!");
+        connect(finishFlag, &Flag::animationFinished, this, [this](){
+            if(level<5){
+                level++;
+                setPos(0, 0);
+                *center=this->pos();
+                allTimer->start();
+                runAnimationTimer->start();
+                winTriggered = false;
+            }
+            else{
+                QMessageBox::information(nullptr,
+                                         "You Win!",
+                                         "Congratulations! You won the game!");
+            }
+            /*if (!stagewinSound->isPlaying()) {
+                stagewinSound, &QSoundEffect::playingChanged //Changing Level after sound effect
+            }*/
         });
     }
 }
@@ -457,10 +491,10 @@ void Mario::takeDamage(int amount) {
         health = 100;
         if (lives <= 0) {
             QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
-            currentScene->clear();
-            return;
+            level = 1;
+            lives = 5;
         }
-        setPos(initX, initY);
+        setPos(0, 0);
         *center=this->pos();
     }
 }
