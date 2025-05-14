@@ -12,7 +12,7 @@ Paratroopa::Paratroopa(int x, int y) {
 
     animationTimer = new QTimer(this);
     connect(animationTimer, &QTimer::timeout, this, &Paratroopa::updateAnimation);
-    animationTimer->start(200);
+    animationTimer->start(100);
 }
 
 void Paratroopa::updateAnimation() {
