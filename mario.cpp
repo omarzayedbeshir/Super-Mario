@@ -344,13 +344,26 @@ void Mario::updatePosition() {
         return;
     }
     QList<QGraphicsItem*> collisions = collidingItems();
+    canMoveRight = true;
+    canMoveLeft = true;
+    QRectF marioRect = this->sceneBoundingRect();
     for (QGraphicsItem* collision : collisions) {
-        if (dynamic_cast<Platform*>(collision)) {
-            if (velocityY > 0) {
-                setPos(x(), collision->y() - height);
+        Platform* platform = dynamic_cast<Platform*>(collision);
+        if (platform) {
+            QRectF platformRect = platform->sceneBoundingRect();
+            if (velocityY > 0 && marioRect.bottom() <= platformRect.top() + velocityY) {
+                setPos(x(), platformRect.top() - marioRect.height());
                 onGround = true;
-                isJumping=false;
+                isJumping = false;
             }
+            else if (velocityY < 0 && marioRect.top() >= platformRect.bottom() + velocityY) {
+                setPos(x(), platformRect.bottom());
+                velocityY = 0;
+            }
+            else if (marioRect.intersects(platformRect) && marioRect.bottom() > platformRect.top() + 5) {
+                handleSideCollision(marioRect, platformRect);
+            }
+            preventApproaching(marioRect, platformRect);
             return;
         }
     }
