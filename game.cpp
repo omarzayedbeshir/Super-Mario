@@ -219,7 +219,7 @@ void Game::renderLevel(int levelNumber) {
     if (root.contains("mario")) {
         auto obj = root["mario"].toObject();
         mario->setScene(scene);
-        mario->setInit(obj["x"].toInt(), obj["y"].toInt());
+        mario->setInitPos(obj["x"].toInt(), obj["y"].toInt());
         mario->setPipes(pipesList);
         mario->setFinishFlag(finishFlag);
         mario->setFlag(QGraphicsItem::ItemIsFocusable);

@@ -33,7 +33,8 @@ public:
     void becomeBase();
     void becomeSuper();
     void setScene(QGraphicsScene *scene);
-    void setInit(int x, int y);
+    void setInitPos(int x, int y);
+    void setInitMovement();
     void setPipes(const QList<pipe*>& pipes);
     void setFinishFlag(Flag* flag);
     void setGoombas(const QList<Goomba*>& goombas);

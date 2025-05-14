@@ -73,10 +73,22 @@ void Mario::setScene(QGraphicsScene *scene){
     currentScene = scene;
 }
 
-void Mario::setInit(int x, int y){
+void Mario::setInitPos(int x, int y){
     initX = x;
     initY = y;
     setPos(x, y);
+}
+
+void Mario::setInitMovement(){
+    velocityX = 0;
+    velocityY = 0;
+    horizontalDirection = "Right";
+    isMovingLeft = false;
+    isMovingRight = false;
+    isJumping = false;
+    isFacingRight = true;
+    onGround = false;
+    pressedKeys.clear();
 }
 
 void Mario::timerFunctions() {
@@ -294,6 +306,7 @@ void Mario::checkFlagCollision() {
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
         connect(finishFlag, &Flag::animationFinished, this, [this](){
             if(level<5){
+                setInitMovement();
                 QMessageBox::information(nullptr, "Level Complete", "You've passed this level!");
                 level++;
                 setPos(0, 0);
@@ -506,6 +519,7 @@ void Mario::takeDamage(int amount) {
         becomeBase();
         lives--;
         health = 100;
+        setInitMovement();
         if (lives <= 0) {
             QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
             level = 1;
@@ -551,9 +565,11 @@ void Mario::keyReleaseEvent(QKeyEvent *event)
     switch(event->key()) {
     case Qt::Key_Left:
         isMovingLeft = false;
+        if(isMovingRight) horizontalDirection = "Right";
         break;
     case Qt::Key_Right:
         isMovingRight = false;
+        if(isMovingLeft) horizontalDirection = "Left";
         break;
     case Qt::Key_Space:
     case Qt::Key_Up:
