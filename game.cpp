@@ -61,6 +61,7 @@ Game::Game(QWidget *parent)
     // Connect button to start the game
     connect(startButton, &QPushButton::clicked, this, [=]() {
         UISetup();
+        renderLevel(1);
     });
 }
 

@@ -1,7 +1,7 @@
 {
     "platforms": [
       { "x": 100, "y": 500, "width": 600, "height": 30 },
-      { "x": 600, "y": 375, "width": 500, "height": 30 },
+      { "x": 600, "y": 375, "width": 450, "height": 30 },
       { "x": 800, "y": 500, "width": 600, "height": 30 },
       { "x": 1500, "y": 500, "width": 1000, "height": 30 },
       { "x": 2600, "y": 500, "width": 800, "height": 30 },
