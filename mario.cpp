@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QGraphicsEffect>
 #include "boss.h"
+#include <QApplication>
 #include "paratroopa.h"
 #include "coin.h"
 
@@ -303,6 +304,7 @@ void Mario::checkFlagCollision() {
                 QMessageBox::information(nullptr,
                                          "You Win!",
                                          "Congratulations! You won the game!");
+                QApplication::quit();
             }
             /*if (!stagewinSound->isPlaying()) {
                 stagewinSound, &QSoundEffect::playingChanged //Changing Level after sound effect
