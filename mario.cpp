@@ -292,6 +292,7 @@ void Mario::checkFlagCollision() {
         finishFlag->startFlagAnimation();
         connect(finishFlag, &Flag::sliding, this, &Mario::onFlagSliding);
         connect(finishFlag, &Flag::animationFinished, this, [this](){
+            QMessageBox::information(nullptr, "Level Complete", "You've passed this level!");
             if(level<5){
                 level++;
                 setPos(0, 0);
