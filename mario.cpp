@@ -502,7 +502,8 @@ void Mario::isCollidingWithDynamicObstacles()
         }  else if (piranha) {
             if (piranha->y() < piranha->getdownY()) {
                 if (!isStar() && canTakeDamage) {
-                    takeDamage(20);
+                    takeDamage(damageToTake);
+                    becomeBase();
                     goombaHitSound->play();
                 }
                 else if (isStar()) {
@@ -535,8 +536,7 @@ void Mario::takeDamage(int amount) {
         setInitMovement();
         if (lives <= 0) {
             QMessageBox::information(nullptr, "Game Over", "You lost all your lives!");
-            level = 1;
-            lives = 5;
+            QApplication::quit();
         }
         setPos(0, 0);
         *center=this->pos();
