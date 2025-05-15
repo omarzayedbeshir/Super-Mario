@@ -258,4 +258,5 @@ void Game::renderLevel(int levelNumber) {
         scene->addItem(funnyText);
         funnyText->setPos(100, 300);
     }
+    mario->setScoreAtLevelStart(mario->getScore());
 }

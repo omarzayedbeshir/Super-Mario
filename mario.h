@@ -27,6 +27,7 @@ public:
     int getLives() const;
     int getScore() const;
     int getHealth() const;
+    void setScoreAtLevelStart(int scoreInput);
     void setLives(int Lives);
     void setScore(int Score);
     void setHealth(int Health);
@@ -90,6 +91,7 @@ private:
     bool canTakeDamage = true;
     bool be_star = false;
     int lives = 5;
+    int scoreAtLevelStart;
     int health = 100;
     int level;
     bool canMoveRight;

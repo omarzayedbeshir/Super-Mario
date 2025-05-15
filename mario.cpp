@@ -129,6 +129,10 @@ int Mario::getScore() const{
     return score;
 }
 
+void Mario::setScoreAtLevelStart(int scoreInput) {
+    scoreAtLevelStart = scoreInput;
+}
+
 void Mario::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
@@ -532,6 +536,7 @@ void Mario::takeDamage(int amount) {
     if (health <= 0) {
         becomeBase();
         lives--;
+        score = scoreAtLevelStart;
         health = 100;
         setInitMovement();
         if (lives <= 0) {
