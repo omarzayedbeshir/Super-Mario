@@ -15,7 +15,7 @@ public:
 private:
     void updateAnimation();
     QTimer* runAnimationTimer;
-    double scale = 8.0;
+    double scale = 5.0;
     int height = 32 * scale;
     int currentRunFrame = 1;
     double velocityY = 0;
