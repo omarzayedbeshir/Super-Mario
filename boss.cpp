@@ -11,6 +11,8 @@ Boss::Boss(int x, int y, QGraphicsScene* sceneInput) {
     initX = x;
     initY = y;
     scene = sceneInput;
+    VelocityX = 0;
+
     positionTimer = new QTimer(this);
     connect(positionTimer, &QTimer::timeout, this, &Boss::updatePosition);
     positionTimer->start(16);
@@ -39,7 +41,9 @@ void Boss::updatePosition() {
         }
     }
 
-    setPos(x() + 4, y() + velocityY);
+    VelocityX = qMin(VelocityX + acceleration, maxSpeed);
+
+    setPos(x() + VelocityX, y() + velocityY);
 }
 
 

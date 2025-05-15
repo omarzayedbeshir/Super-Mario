@@ -26,6 +26,9 @@ private:
     QGraphicsScene* scene;
     int initX;
     int initY;
+    const double acceleration = 0.05;
+    const double maxSpeed     = 8.0;
+    double VelocityX;
 
 private slots:
     void updatePosition();
