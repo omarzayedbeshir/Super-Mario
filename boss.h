@@ -26,8 +26,8 @@ private:
     QGraphicsScene* scene;
     int initX;
     int initY;
-    const double acceleration = 0.05;
-    const double maxSpeed     = 8.0;
+    const double acceleration = 0.04;
+    const double maxSpeed     = 6.0;
     double VelocityX;
 
 private slots:
