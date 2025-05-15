@@ -490,7 +490,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 score += 100;
             } else if (canTakeDamage) {
                 if (!isStar()) {
-                    takeDamage(20);
+                    takeDamage(damageToTake);
                     becomeBase();
                     goombaHitSound->play();
                 } else {
@@ -545,7 +545,7 @@ void Mario::takeDamage(int amount) {
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
-    if (winTriggered) return;   
+    if (winTriggered) return;
 
     pressedKeys.insert(event->key());
     isCollidingWithPipes();
