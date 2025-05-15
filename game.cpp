@@ -115,8 +115,11 @@ Game::~Game()
 void Game::renderLevel(int levelNumber) {
     platformsList.clear();
     pipesList.clear();
+
+    int length = 6000 + (levelNumber - 1) * 500;
+
     scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 6000, 600);
+    scene->setSceneRect(0, 0, length, 600);
     QPixmap backgroundImage(":graphics/Mario Game Assets/Background_2.png");
     backgroundImage = backgroundImage.scaled(3000, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     scene->setBackgroundBrush(backgroundImage);
