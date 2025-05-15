@@ -129,6 +129,10 @@ int Mario::getScore() const{
     return score;
 }
 
+void Mario::setScoreAtLevelStart(int scoreInput) {
+    scoreAtLevelStart = scoreInput;
+}
+
 void Mario::setPipes(const QList<pipe*>& pipes) {
     pipeList = pipes;
 }
@@ -490,7 +494,7 @@ void Mario::isCollidingWithDynamicObstacles()
                 score += 100;
             } else if (canTakeDamage) {
                 if (!isStar()) {
-                    takeDamage(20);
+                    takeDamage(damageToTake);
                     becomeBase();
                     goombaHitSound->play();
                 } else {
@@ -532,6 +536,7 @@ void Mario::takeDamage(int amount) {
     if (health <= 0) {
         becomeBase();
         lives--;
+        score = scoreAtLevelStart;
         health = 100;
         setInitMovement();
         if (lives <= 0) {
@@ -545,7 +550,7 @@ void Mario::takeDamage(int amount) {
 
 void Mario::keyPressEvent(QKeyEvent *event)
 {
-    if (winTriggered) return;   
+    if (winTriggered) return;
 
     pressedKeys.insert(event->key());
     isCollidingWithPipes();

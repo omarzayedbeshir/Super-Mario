@@ -62,7 +62,6 @@ Game::Game(QWidget *parent)
     // Connect button to start the game
     connect(startButton, &QPushButton::clicked, this, [=]() {
         UISetup();
-        renderLevel(1);
     });
 }
 
@@ -103,6 +102,7 @@ void Game::UISetup() {
         livesText->setPos(view->mapToScene(10, 40));
         healthText->setPos(view->mapToScene(10, 70));
         levelText->setPos(view->mapToScene(10, 100));
+        mario->setFocus();
     });
     cameraTimer->start(1);
 }
@@ -258,4 +258,5 @@ void Game::renderLevel(int levelNumber) {
         scene->addItem(funnyText);
         funnyText->setPos(100, 300);
     }
+    mario->setScoreAtLevelStart(mario->getScore());
 }
