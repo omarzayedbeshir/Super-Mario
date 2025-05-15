@@ -23,6 +23,7 @@
 #include "paratroopa.h"
 #include "boss.h"
 #include "coin.h"
+#include "castle.h"
 
 Game::Game(QWidget *parent)
     : QMainWindow(parent)
@@ -215,6 +216,13 @@ void Game::renderLevel(int levelNumber) {
         Flag* flag = new Flag(obj["x"].toInt(), obj["y"].toInt());
         scene->addItem(flag);
         finishFlag = flag;
+    }
+
+
+    if (root.contains("castle")) {
+        auto obj = root["castle"].toObject();
+        Castle* castle = new Castle(obj["x"].toInt(), obj["y"].toInt());
+        scene->addItem(castle);
     }
 
     if (root.contains("mario")) {

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include "castle.h"
 #include "mario.h"
 #include "platform.h"
 #include "pipe.h"
